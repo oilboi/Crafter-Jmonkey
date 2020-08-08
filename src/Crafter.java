@@ -70,7 +70,9 @@ public class Crafter extends SimpleApplication {
         rootNode.attachChild(geo);
 
 
-        Chunk chunky = new Chunk(0,0);
+        Chunk chunky = new Chunk();
+
+        chunky.printChunk();
 
 
 
