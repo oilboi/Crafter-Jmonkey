@@ -26,8 +26,12 @@ public class Crafter extends SimpleApplication {
         appSettings.setWidth(d.width/2);
         appSettings.setHeight(d.height/2);
 
+        //window title
+        appSettings.setTitle("Crafter");
+
         //apply settings
         app.setSettings(appSettings);
+
 
         //begin app
         app.start();
