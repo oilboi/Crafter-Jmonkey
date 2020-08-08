@@ -23,8 +23,9 @@ public class ChunkMesh extends Mesh{
         int y = 0;
         int z = 0;
 
-        Collection<Geometry> test = new ArrayList();
 
+
+        Collection<Geometry> test = new ArrayList();
         for (int i = 0; i < 5; i++) {
             ChunkMesh mesh = new ChunkMesh();
 
@@ -51,7 +52,7 @@ public class ChunkMesh extends Mesh{
 
             Material mat = new Material(assetManager,
                     "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.Blue);
+            mat.setColor("Color", ColorRGBA.randomColor());
             geo.setMaterial(mat);
 
             test.add(geo);

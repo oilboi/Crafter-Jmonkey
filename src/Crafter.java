@@ -7,7 +7,6 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
 import com.jme3.texture.Texture;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -36,8 +35,8 @@ public class Crafter extends SimpleApplication {
         //window title
         appSettings.setTitle("Crafter");
 
+        //set window image
         BufferedImage icon = ImageIO.read(new File(DIR + "\\texture\\icon.png"));
-
         appSettings.setIcons(new BufferedImage[]{icon});
 
         System.out.println("Working Directory = " + DIR);
@@ -58,7 +57,6 @@ public class Crafter extends SimpleApplication {
         Chunk chunky = new Chunk();
 
         Geometry geo = ChunkMesh.genChunkMesh(chunky, assetManager);
-
 
         rootNode.attachChild(geo);
 
