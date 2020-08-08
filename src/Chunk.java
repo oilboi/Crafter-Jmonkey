@@ -10,7 +10,7 @@ public class Chunk {
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
     public Chunk(){
-        genDebug();
+        genRandom();
     }
 
     public short[] getBlocks(){
