@@ -29,10 +29,10 @@ public class ChunkMesh extends Mesh{
             ChunkMesh mesh = new ChunkMesh();
 
             Vector3f[] vertices = new Vector3f[4];
-            vertices[0] = new Vector3f(0+(i*3), 0, 0);
-            vertices[1] = new Vector3f(3+(i*3), 0, 0);
-            vertices[2] = new Vector3f(0+(i*3), 3, 0);
-            vertices[3] = new Vector3f(3+(i*3), 3, 0);
+            vertices[0] = new Vector3f(0+i, 0, 0);
+            vertices[1] = new Vector3f(1f+i, 0, 0);
+            vertices[2] = new Vector3f(0+i, 1f, 0);
+            vertices[3] = new Vector3f(1f+i, 1f, 0);
 
             Vector2f[] texCoord = new Vector2f[4];
             texCoord[0] = new Vector2f(0, 0);
