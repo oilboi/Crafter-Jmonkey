@@ -72,7 +72,6 @@ public class Crafter extends SimpleApplication {
 
         Chunk chunky = new Chunk();
 
-        chunky.printChunk();
 
 
 
