@@ -41,21 +41,10 @@ public class Crafter extends SimpleApplication {
 
         Chunk chunky = new Chunk();
 
-        int angle = 0;
-        for (int i = 0; i < 4; i++) {
-            System.out.println(angle);
-            Quad quad = new Quad(5, 5);
-            Geometry geo = new Geometry("quady", quad);
+        Geometry geo = ChunkMesh.genChunkMesh(chunky, assetManager);
 
-            geo.rotate(0, FastMath.DEG_TO_RAD * angle, 0);
 
-            Material mat = new Material(assetManager,
-                    "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.Blue);
-            geo.setMaterial(mat);
-            rootNode.attachChild(geo);
+        rootNode.attachChild(geo);
 
-            angle += 90;
-        }
     }
 }
