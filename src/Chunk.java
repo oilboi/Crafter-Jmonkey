@@ -2,15 +2,15 @@ import java.util.Arrays;
 
 public class Chunk {
     //y x z - longest used for memory efficiency
-    private static short chunkSizeX = 2;
-    private static short chunkSizeY = 2;
-    private static short chunkSizeZ = 2;
+    private static short chunkSizeX = 16;
+    private static short chunkSizeY = 128;
+    private static short chunkSizeZ = 16;
 
-    private static short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
-    private static byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
+    private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
+    private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
     public Chunk(){
-        genRandom();
+        genDebug();
     }
 
     private static int hash(int x, int y, int z){
@@ -27,32 +27,54 @@ public class Chunk {
         return result;
     }
 
-    public static void genRandom(){
-        for (int y = 0; y < chunkSizeY; y++){
-            for(int x = 0; x < chunkSizeX; x++) {
-                for ( int z = 0; z < chunkSizeZ; z++) {
-
-                    short newBlock = 1;//(short)(Math.random() * 30);
-                    int hashedPos = hash(x,y,z);
-
-                    //System.out.println(hashedPos);
-                    System.out.println("NEW BLOCK");
-
-                    int[] tempOutput = {x,y,z};
-                    System.out.println(Arrays.toString(tempOutput));
-
-                    int[] newHash = getHash(hashedPos);
-
-                    System.out.println(Arrays.toString(newHash));
-
-                    block[hashedPos] = newBlock;
-
+    //randomly assign block ids
+    public void genRandom(){
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
+            block[hash(x, y, z)] = (short)(Math.random() * 30);
+            y++;
+            if( y > chunkSizeY - 1){
+                y = 0;
+                x++;
+                if( x > chunkSizeX - 1 ){
+                    x = 0;
+                    z++;
                 }
             }
         }
     }
 
-    public static void printChunk(){
+    //debug testing for now
+    public void genDebug(){
+        int x = 0;
+        int y = 0;
+        int z = 0;
+
+        for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
+            short newBlock = 1;
+            int hashedPos = hash(x, y, z);
+            System.out.println(hashedPos);
+            System.out.println("NEW BLOCK");
+            int[] tempOutput = {x, y, z};
+            System.out.println(Arrays.toString(tempOutput));
+            int[] newHash = getHash(hashedPos);
+            System.out.println(Arrays.toString(newHash));
+            block[hashedPos] = newBlock;
+            y++;
+            if( y > chunkSizeY - 1){
+                y = 0;
+                x++;
+                if( x > chunkSizeX - 1 ){
+                    x = 0;
+                    z++;
+                }
+            }
+        }
+    }
+
+    public void printChunk(){
         for (int i = 0; i < block.length; i++){
             System.out.println(block[i]);
 //            if(block[i] != 1){
