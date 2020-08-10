@@ -4,6 +4,9 @@ public class ChunkMath {
     private static short chunkSizeZ = 16;
 
     public static int genHash(int x, int y, int z){
+        if( x < 0 || x > chunkSizeX-1  || y < 0 || y > chunkSizeY-1 || z < 0 || y > chunkSizeZ-1){
+            return 0;
+        }
         return((x*chunkSizeY) + y + (z*(chunkSizeX * chunkSizeY)));
     }
 
