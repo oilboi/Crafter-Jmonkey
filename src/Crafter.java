@@ -1,12 +1,7 @@
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
-import com.jme3.scene.Mesh;
-import com.jme3.scene.shape.Quad;
 import com.jme3.system.AppSettings;
-import com.jme3.texture.Texture;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,7 +10,7 @@ import java.io.IOException;
 
 public class Crafter extends SimpleApplication {
     //the working directory of the game
-    public final static String DIR = System.getProperty("user.dir");
+    public final static String DIRECTORY = System.getProperty("user.dir");
 
     public static void main(String[] args) throws IOException {
         //self app creation
@@ -36,10 +31,10 @@ public class Crafter extends SimpleApplication {
         appSettings.setTitle("Crafter");
 
         //set window image
-        BufferedImage icon = ImageIO.read(new File(DIR + "\\texture\\icon.png"));
+        BufferedImage icon = ImageIO.read(new File(DIRECTORY + "\\texture\\icon.png"));
         appSettings.setIcons(new BufferedImage[]{icon});
 
-        System.out.println("Working Directory = " + DIR);
+        System.out.println("Working Directory = " + DIRECTORY);
 
         //apply settings
         app.setSettings(appSettings);
