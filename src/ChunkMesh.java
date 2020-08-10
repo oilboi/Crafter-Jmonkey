@@ -5,6 +5,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
 import com.jme3.scene.shape.Quad;
+import com.jme3.texture.Texture;
 import jme3tools.optimize.GeometryBatchFactory;
 
 import java.util.ArrayList;
@@ -87,10 +88,11 @@ public class ChunkMesh extends Mesh{
 
         Geometry geo = new Geometry("test", chunky);
 
-        Material mat = new Material(assetManager,
-                "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Blue);
-        geo.setMaterial(mat);
+
+        geo.setMaterial(Loader.loadMaterial("dirt.png", assetManager));
+
+        //chunky.scaleTextureCoordinates(new Vector2f(2,2));
+
 
         return geo;
     }

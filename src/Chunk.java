@@ -11,6 +11,7 @@ public class Chunk {
 
     public Chunk(){
         genRandom();
+        //genDebug();
     }
 
     public short[] getBlocks(){

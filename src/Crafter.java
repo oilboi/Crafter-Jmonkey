@@ -1,6 +1,13 @@
 import com.jme3.app.SimpleApplication;
+import com.jme3.asset.AssetEventListener;
+import com.jme3.asset.AssetKey;
+import com.jme3.asset.TextureKey;
+import com.jme3.asset.plugins.FileLocator;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
+import com.jme3.texture.Texture;
+import com.jogamp.openal.sound3d.Buffer;
 import org.lwjgl.opengl.Display;
 
 import javax.imageio.ImageIO;
@@ -12,9 +19,6 @@ import java.nio.charset.Charset;
 import java.util.Random;
 
 public class Crafter extends SimpleApplication {
-    //the working directory of the game
-    public final static String DIRECTORY = System.getProperty("user.dir");
-
     public static void main(String[] args) throws IOException {
         //self app creation
         Crafter app = new Crafter();
@@ -33,11 +37,11 @@ public class Crafter extends SimpleApplication {
         //window title
         appSettings.setTitle("Crafter");
 
-        //set window image
-        BufferedImage icon = ImageIO.read(new File(DIRECTORY + "\\texture\\icon.png"));
-        appSettings.setIcons(new BufferedImage[]{icon});
+        app.setDisplayFps(true);
 
-        System.out.println("Working Directory = " + DIRECTORY);
+        //set window image
+        BufferedImage icon = ImageIO.read(new File(System.getProperty("user.dir") + "\\texture\\icon.png"));
+        appSettings.setIcons(new BufferedImage[]{icon});
 
         //apply settings
         app.setSettings(appSettings);
@@ -48,15 +52,33 @@ public class Crafter extends SimpleApplication {
 
 
     @Override
-    public void simpleInitApp(){
+    public void simpleInitApp() {
 
         flyCam.setMoveSpeed(100);
 
+        this.assetManager.registerLocator("texture/", FileLocator.class); // default
+
+        rootNode.setCullHint(Spatial.CullHint.Never);
     }
 
-    private int count = 0;
+    private int count = 19;
+
     @Override
     public void simpleUpdate(float tpf){
+
+
+        if(count < 20) {
+
+            Chunk chunk = new Chunk();
+
+          //  rootNode.detachAllChildren();
+
+            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager);
+
+            rootNode.attachChild(geo);
+
+            count++;
+        }
 
 //        if (count < 20) {
 //            count++;
