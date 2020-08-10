@@ -61,7 +61,7 @@ public class Crafter extends SimpleApplication {
         rootNode.setCullHint(Spatial.CullHint.Never);
     }
 
-    private int renderDistance = 2;
+    private int renderDistance = 5;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -70,26 +70,32 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf){
 
-        if (!genned) {
-            Chunk chunk = new Chunk();
-            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, 0, 0);
-            rootNode.attachChild(geo);
-            genned = true;
-        }
-//        counter++;
-//        if (counter > 120 && z <= renderDistance){
+//        if (counter > 1000 && !genned) {
 //            Chunk chunk = new Chunk();
-//
-//            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
+//            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, 0, 0);
 //            rootNode.attachChild(geo);
-//            System.out.println(x + " " + z);
+//            genned = true;
+//        } else if (!genned){
+//            System.out.println(counter);
 //            counter++;
-//            x++;
-//            if (x > renderDistance) {
-//                x = -renderDistance;
-//                z++;
-//            }
 //        }
+        counter++;
+        if (counter > 1000 && z <= renderDistance){
+            Chunk chunk = new Chunk();
+
+            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
+            rootNode.attachChild(geo);
+
+            //System.out.println(x + " " + z);
+
+            counter = 0;
+
+            x++;
+            if (x > renderDistance) {
+                x = -renderDistance;
+                z++;
+            }
+        }
 
 //        if (count < 20) {
 //            count++;
