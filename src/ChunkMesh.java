@@ -60,7 +60,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x+1,y,z) == 0) {
                     geo = new Geometry("OurQuad", quad); // using Quad object
                     geo.setLocalTranslation(1 + x + chunkX, 0 + y, 0 + z + chunkZ);
-                    geo.rotate(0, (float) FastMath.PI / 2, 0);
+                    geo.rotate(0,  FastMath.PI / 2, 0);
                     meshCollection.add(geo);
                 }
 
@@ -68,7 +68,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x,y,z-1) == 0) {
                     geo = new Geometry("OurQuad", quad); // using Quad object
                     geo.setLocalTranslation(1 + x + chunkX, 0 + y, -1 + z + chunkZ);
-                    geo.rotate(0, (float) FastMath.PI, 0);
+                    geo.rotate(0,  FastMath.PI, 0);
                     meshCollection.add(geo);
                 }
 
@@ -76,7 +76,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x-1,y,z) == 0) {
                     geo = new Geometry("OurQuad", quad); // using Quad object
                     geo.setLocalTranslation(0 + x + chunkX, 0 + y, -1 + z + chunkZ);
-                    geo.rotate(0, (float) FastMath.PI * (float) 1.5, 0);
+                    geo.rotate(0,  FastMath.PI * (float) 1.5, 0);
                     meshCollection.add(geo);
                 }
 
