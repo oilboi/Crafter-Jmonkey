@@ -54,30 +54,34 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        flyCam.setMoveSpeed(10);
+        flyCam.setMoveSpeed(100);
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 
         rootNode.setCullHint(Spatial.CullHint.Never);
     }
 
-    private int count = 19;
+    private int renderDistance = 8;
 
+    private int x = -renderDistance;
+    private int z = -renderDistance;
+    private int counter = 0;
     @Override
     public void simpleUpdate(float tpf){
 
-
-        if(count < 20) {
-
+        counter++;
+        if (counter > 120 && z <= renderDistance){
             Chunk chunk = new Chunk();
 
-          //  rootNode.detachAllChildren();
-
-            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager);
-
+            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
             rootNode.attachChild(geo);
-
-            count++;
+            System.out.println(x + " " + z);
+            counter++;
+            x++;
+            if (x > renderDistance) {
+                x = -renderDistance;
+                z++;
+            }
         }
 
 //        if (count < 20) {
