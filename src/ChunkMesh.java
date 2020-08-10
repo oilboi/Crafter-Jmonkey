@@ -25,53 +25,75 @@ public class ChunkMesh extends Mesh{
 
         Collection<Geometry> meshCollection = new ArrayList();
 
+        int count = 0;
+
+        Quad quad = new Quad(1, 1); //The quad worker object
         for (int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++) {
-
             int block = chunk.getBlock(x,y,z);
+
             if( block > 0) {
-
-                Material matVC = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-                matVC.setBoolean("VertexColor", true);
-
-                Quad quad = new Quad(1, 1); //The quad worker object
+                //TODO: optimize this further
+                //TODO: put this on a short term thread to return then terminate thread
+                /*
+                TODO: WARNING!!
+                x is pushing the object to the right
+                z is in front of x
+                for axis x check z
+                for axis z check x
+                 */
+                //Material matVC = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+                //matVC.setBoolean("VertexColor", true);
 
                 //front
-                Geometry geo = new Geometry("OurQuad", quad); // using Quad object
-                geo.setLocalTranslation(0 + x, 0 + y, 0 + z);
-                meshCollection.add(geo);
+                if (chunk.getBlock(x,y,z+1) == 0) {
+                    Geometry geo = new Geometry("OurQuad", quad); // using Quad object
+                    geo.setLocalTranslation(0 + x, 0 + y, 0 + z);
+                    meshCollection.add(geo);
+                }
 
                 //right
-                Geometry geo2 = new Geometry("OurQuad", quad); // using Quad object
-                geo2.setLocalTranslation(1 + x, 0 + y, 0 + z);
-                geo2.rotate(0, (float) Math.PI / 2, 0);
-                meshCollection.add(geo2);
+                if (chunk.getBlock(x+1,y,z) == 0) {
+                    Geometry geo2 = new Geometry("OurQuad", quad); // using Quad object
+                    geo2.setLocalTranslation(1 + x, 0 + y, 0 + z);
+                    geo2.rotate(0, (float) Math.PI / 2, 0);
+                    meshCollection.add(geo2);
+                }
 
                 //back
-                Geometry geo3 = new Geometry("OurQuad", quad); // using Quad object
-                geo3.setLocalTranslation(1 + x, 0 + y, -1 + z);
-                geo3.rotate(0, (float) Math.PI, 0);
-                meshCollection.add(geo3);
+                if (chunk.getBlock(x,y,z-1) == 0) {
+                    Geometry geo3 = new Geometry("OurQuad", quad); // using Quad object
+                    geo3.setLocalTranslation(1 + x, 0 + y, -1 + z);
+                    geo3.rotate(0, (float) Math.PI, 0);
+                    meshCollection.add(geo3);
+                }
 
                 //left
-                Geometry geo4 = new Geometry("OurQuad", quad); // using Quad object
-                geo4.setLocalTranslation(0 + x, 0 + y, -1 + z);
-                geo4.rotate(0, (float) Math.PI * (float) 1.5, 0);
-                meshCollection.add(geo4);
+                if (chunk.getBlock(x-1,y,z) == 0) {
+                    Geometry geo4 = new Geometry("OurQuad", quad); // using Quad object
+                    geo4.setLocalTranslation(0 + x, 0 + y, -1 + z);
+                    geo4.rotate(0, (float) Math.PI * (float) 1.5, 0);
+                    meshCollection.add(geo4);
+                }
 
                 //top
-                Geometry geo5 = new Geometry("OurQuad", quad); // using Quad object
-                geo5.setLocalTranslation(0 + x, 1 + y, 0 + z);
-                geo5.rotate((float) Math.PI * (float) 1.5, 0, 0);
-                meshCollection.add(geo5);
+                if (chunk.getBlock(x,y+1,z) == 0) {
+                    Geometry geo5 = new Geometry("OurQuad", quad); // using Quad object
+                    geo5.setLocalTranslation(0 + x, 1 + y, 0 + z);
+                    geo5.rotate((float) Math.PI * (float) 1.5, 0, 0);
+                    meshCollection.add(geo5);
+                }
 
                 //bottom
-                Geometry geo6 = new Geometry("OurQuad", quad); // using Quad object
-                geo6.setLocalTranslation(0 + x, 0 + y, 0 + z);
-                geo6.rotate((float) Math.PI / 2, (float) Math.PI / 2, 0);
-                meshCollection.add(geo6);
+                if (chunk.getBlock(x,y-1,z) == 0) {
+                    Geometry geo6 = new Geometry("OurQuad", quad); // using Quad object
+                    geo6.setLocalTranslation(0 + x, 0 + y, 0 + z);
+                    geo6.rotate((float) Math.PI / 2, (float) Math.PI / 2, 0);
+                    meshCollection.add(geo6);
+                }
             }
+
             y++;
-            if( y > chunkSizeY - 1){
+            if( y > chunkSizeY - 1 ){
                 y = 0;
                 x++;
                 if( x > chunkSizeX - 1 ){

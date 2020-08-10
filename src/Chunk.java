@@ -38,9 +38,13 @@ public class Chunk {
     }
 
     public int getBlock(int x,int y,int z){
-        int hashy = ChunkMath.genHash(x,y,z);
-
-        return block[hashy];
+        //TODO: attempt to return neighboring block if out of bounds of x or z
+        if( x < 0 || x >= chunkSizeX || y < 0 || y >= chunkSizeY || z < 0 || z >= chunkSizeZ){
+            return 0;
+        } else {
+            int hashy = ChunkMath.genHash(x, y, z);
+            return block[hashy];
+        }
     }
 
     //debug testing for now
@@ -51,14 +55,28 @@ public class Chunk {
 
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
             short newBlock = 1;
+
             int hashedPos = ChunkMath.genHash(x, y, z);
-            System.out.println(hashedPos);
-            System.out.println("NEW BLOCK");
+
+            //TODO: these are marked TODO because it shows up in yellow in my IDE
+
+            System.out.println("NEW BLOCK"); //TODO
+
+            System.out.println(hashedPos); //TODO
+
+
             int[] tempOutput = {x, y, z};
-            System.out.println(Arrays.toString(tempOutput));
+
+            System.out.println(Arrays.toString(tempOutput)); //TODO
+
             int[] newHash = ChunkMath.getHash(hashedPos);
-            System.out.println(Arrays.toString(newHash));
+
+            System.out.println(Arrays.toString(newHash)); //TODO
+
             block[hashedPos] = newBlock;
+
+            System.out.println("--------");
+
             y++;
             if( y > chunkSizeY - 1){
                 y = 0;
@@ -73,10 +91,10 @@ public class Chunk {
 
     public void printChunk(){
         for (int i = 0; i < block.length; i++){
-            //System.out.println(block[i]);
-            if(block[i] != 1){ //this is debug
-                System.out.printf("WARNING!");
-            }
+//            System.out.println(block[i]);
+//            if(block[i] != 1){ //this is debug
+//                System.out.printf("WARNING!");
+//            }
         }
     }
 }
