@@ -61,28 +61,35 @@ public class Crafter extends SimpleApplication {
         rootNode.setCullHint(Spatial.CullHint.Never);
     }
 
-    private int renderDistance = 8;
+    private int renderDistance = 2;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
     private int counter = 0;
+    private boolean genned = false;
     @Override
     public void simpleUpdate(float tpf){
 
-        counter++;
-        if (counter > 120 && z <= renderDistance){
+        if (!genned) {
             Chunk chunk = new Chunk();
-
-            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
+            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, 0, 0);
             rootNode.attachChild(geo);
-            System.out.println(x + " " + z);
-            counter++;
-            x++;
-            if (x > renderDistance) {
-                x = -renderDistance;
-                z++;
-            }
+            genned = true;
         }
+//        counter++;
+//        if (counter > 120 && z <= renderDistance){
+//            Chunk chunk = new Chunk();
+//
+//            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
+//            rootNode.attachChild(geo);
+//            System.out.println(x + " " + z);
+//            counter++;
+//            x++;
+//            if (x > renderDistance) {
+//                x = -renderDistance;
+//                z++;
+//            }
+//        }
 
 //        if (count < 20) {
 //            count++;

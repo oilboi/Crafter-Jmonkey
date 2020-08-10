@@ -1,3 +1,5 @@
+import com.jme3.math.FastMath;
+
 public class ChunkMath {
     private static short chunkSizeX = 16;
     private static short chunkSizeY = 128;
@@ -8,11 +10,11 @@ public class ChunkMath {
     }
 
     public static int[] getHash(int i) {
-        int z = (int)(Math.floor(i/(chunkSizeX * chunkSizeY)));
+        int z = (int)(FastMath.floor(i/(chunkSizeX * chunkSizeY)));
         i %= (chunkSizeX * chunkSizeY);
-        int x = (int)(Math.floor(i/chunkSizeY));
+        int x = (int)(FastMath.floor(i/chunkSizeY));
         i %= chunkSizeY;
-        int y = (int)(Math.floor(i));
+        int y = (int)(FastMath.floor(i));
         int[] result = {x,y,z};
         return result;
     }

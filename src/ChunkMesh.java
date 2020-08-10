@@ -58,7 +58,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x+1,y,z) == 0) {
                     Geometry geo2 = new Geometry("OurQuad", quad); // using Quad object
                     geo2.setLocalTranslation(1 + x + chunkX, 0 + y, 0 + z + chunkZ);
-                    geo2.rotate(0, (float) Math.PI / 2, 0);
+                    geo2.rotate(0, (float) FastMath.PI / 2, 0);
                     meshCollection.add(geo2);
                 }
 
@@ -66,7 +66,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x,y,z-1) == 0) {
                     Geometry geo3 = new Geometry("OurQuad", quad); // using Quad object
                     geo3.setLocalTranslation(1 + x + chunkX, 0 + y, -1 + z + chunkZ);
-                    geo3.rotate(0, (float) Math.PI, 0);
+                    geo3.rotate(0, (float) FastMath.PI, 0);
                     meshCollection.add(geo3);
                 }
 
@@ -74,7 +74,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x-1,y,z) == 0) {
                     Geometry geo4 = new Geometry("OurQuad", quad); // using Quad object
                     geo4.setLocalTranslation(0 + x + chunkX, 0 + y, -1 + z + chunkZ);
-                    geo4.rotate(0, (float) Math.PI * (float) 1.5, 0);
+                    geo4.rotate(0, (float) FastMath.PI * (float) 1.5, 0);
                     meshCollection.add(geo4);
                 }
 
@@ -82,7 +82,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x,y+1,z) == 0) {
                     Geometry geo5 = new Geometry("OurQuad", quad); // using Quad object
                     geo5.setLocalTranslation(0 + x + chunkX, 1 + y, 0 + z + chunkZ);
-                    geo5.rotate((float) Math.PI * (float) 1.5, 0, 0);
+                    geo5.rotate((float) FastMath.PI * (float) 1.5, 0, 0);
                     meshCollection.add(geo5);
                 }
 
@@ -90,7 +90,7 @@ public class ChunkMesh extends Mesh{
                 if (chunk.getBlock(x,y-1,z) == 0) {
                     Geometry geo6 = new Geometry("OurQuad", quad); // using Quad object
                     geo6.setLocalTranslation(0 + x + chunkX, 0 + y, 0 + z + chunkZ);
-                    geo6.rotate((float) Math.PI / 2, (float) Math.PI / 2, 0);
+                    geo6.rotate((float) FastMath.PI / 2, (float) FastMath.PI / 2, 0);
                     meshCollection.add(geo6);
                 }
             }
