@@ -4,6 +4,7 @@ public class ChunkMath {
     private static short chunkSizeZ = 16;
 
     public static int genHash(int x, int y, int z){
+        //TODO: attempt to return neighboring block if out of bounds of x or z
         if( x < 0 || x > chunkSizeX-1  || y < 0 || y > chunkSizeY-1 || z < 0 || y > chunkSizeZ-1){
             return 0;
         }
