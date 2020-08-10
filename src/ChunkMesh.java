@@ -112,9 +112,7 @@ public class ChunkMesh extends Mesh{
 
         GeometryBatchFactory.mergeGeometries(meshCollection,chunky);
 
-
         geo = new Geometry("test", chunky);
-
 
         geo.setMaterial(Loader.loadMaterial("dirt.png", assetManager));
 
