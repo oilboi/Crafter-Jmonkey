@@ -4,6 +4,7 @@ import com.jme3.math.*;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
 import com.jme3.scene.Node;
+import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
 import jme3tools.optimize.GeometryBatchFactory;
@@ -110,6 +111,7 @@ public class ChunkMesh extends Mesh{
 
         Mesh chunky = new Mesh();
 
+
         GeometryBatchFactory.mergeGeometries(meshCollection,chunky);
 
         geo = new Geometry("test", chunky);
@@ -120,6 +122,11 @@ public class ChunkMesh extends Mesh{
         long endTime = System.currentTimeMillis();
         double timeElapsed = (double)(endTime - startTime)/1000;
         System.out.println("Mesh gen time: " + timeElapsed + " seconds");
+
+        meshCollection.clear();
+        meshCollection = null;
+        chunky = null;
+
         return geo;
     }
 }
