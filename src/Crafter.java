@@ -61,7 +61,7 @@ public class Crafter extends SimpleApplication {
         rootNode.setCullHint(Spatial.CullHint.Never);
     }
 
-    private int renderDistance = 5;
+    private int renderDistance = 20;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -73,28 +73,42 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf){
 
+        //this is warmup gc then gen 1 chunk
 //        if (counter > 1000 && !genned) {
+//            long startTime = System.currentTimeMillis();
 //            Chunk chunk = new Chunk();
 //            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, 0, 0);
 //            rootNode.attachChild(geo);
 //            System.gc();
 //            genned = true;
+//
+//            long endTime = System.currentTimeMillis();
+//            double timeElapsed = (double)(endTime - startTime)/1000;
+//            System.out.println("Chunk init time: " + timeElapsed + " seconds");
 //        } else if (!genned){
 //            System.out.println(counter);
 //            counter++;
 //        }
-        counter++;
-        if (counter > 250 && z <= renderDistance){
 
+        //this is for dynamic chunk generation
+        counter++;
+        if (counter > 5 && z <= renderDistance){
+            long startTime = System.currentTimeMillis();
             chunk = new Chunk();
             Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
+            long endTime = System.currentTimeMillis();
+            double timeElapsed = (double)(endTime - startTime)/1000;
+            System.out.println("Chunk init time: " + timeElapsed + " seconds");
             rootNode.attachChild(geo);
 
             //System.out.println(x + " " + z);
+            chunk = null;
+            geo = null;
+
+            System.gc();
+
 
             counter = 0;
-
-
             x++;
             if (x > renderDistance) {
                 x = -renderDistance;

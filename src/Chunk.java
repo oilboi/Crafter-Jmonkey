@@ -12,8 +12,8 @@ public class Chunk {
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
     public Chunk(){
-        genRandom();
-        //genDebug();
+//        genRandom(); //this is for performance testing and uses A LOT of memory
+        genDebug();
     }
 
     public short[] getBlocks(){
@@ -62,22 +62,22 @@ public class Chunk {
 
             //TODO: these are marked TODO because it shows up in yellow in my IDE
 
-            System.out.println("NEW BLOCK"); //TODO
+//            System.out.println("NEW BLOCK"); //TODO
 
-            System.out.println(hashedPos); //TODO
+//            System.out.println(hashedPos); //TODO
 
 
-            int[] tempOutput = {x, y, z};
+//            int[] tempOutput = {x, y, z};
 
-            System.out.println(Arrays.toString(tempOutput)); //TODO
+//            System.out.println(Arrays.toString(tempOutput)); //TODO
 
-            int[] newHash = ChunkMath.getHash(hashedPos);
+//            int[] newHash = ChunkMath.getHash(hashedPos);
 
-            System.out.println(Arrays.toString(newHash)); //TODO
+//            System.out.println(Arrays.toString(newHash)); //TODO
 
             block[hashedPos] = newBlock;
 
-            System.out.println("--------");
+//            System.out.println("--------");
 
             y++;
             if( y > chunkSizeY - 1){
