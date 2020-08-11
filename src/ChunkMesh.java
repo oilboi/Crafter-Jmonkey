@@ -119,13 +119,15 @@ public class ChunkMesh extends Mesh{
         geo.setMaterial(Loader.loadMaterial("dirt.png", assetManager));
 
         //chunky.scaleTextureCoordinates(new Vector2f(2,2));
-        long endTime = System.currentTimeMillis();
-        double timeElapsed = (double)(endTime - startTime)/1000;
-        System.out.println("Mesh gen time: " + timeElapsed + " seconds");
 
         meshCollection.clear();
         meshCollection = null;
         chunky = null;
+        long endTime = System.currentTimeMillis();
+        double timeElapsed = (double)(endTime - startTime)/1000;
+        System.out.println("Mesh gen time: " + timeElapsed + " seconds");
+
+
 
         return geo;
     }
