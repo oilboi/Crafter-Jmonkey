@@ -29,13 +29,15 @@ public class ChunkMesh extends Mesh{
         chunkX *= chunkSizeX;
         chunkZ *= chunkSizeZ;
 
-        Quad quad = new Quad(1, 1); //The quad worker object
+        Quad quad = new Quad((byte)1, (byte)1); //The quad worker object
+
         Collection<Geometry> meshCollection = new ArrayList();
 
         Geometry geo; // using Quad object
+        int block;
 
         for (int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++) {
-            int block = chunk.getBlock(x,y,z);
+            block = chunk.getBlock(x,y,z);
 
             if( block > 0) {
                 //TODO: optimize this further
@@ -44,7 +46,7 @@ public class ChunkMesh extends Mesh{
 
 
                 if (chunk.getBlock(x,y,z+1) == 0) {
-                    geo = new Geometry("OurQuad", quad);
+                    geo = new Geometry("", quad);
                     geo.setLocalTranslation(0 + x + chunkX, 0 + y, 0 + z + chunkZ);
                     meshCollection.add(geo);
                 }
@@ -52,7 +54,7 @@ public class ChunkMesh extends Mesh{
 
                 //right
                 if (chunk.getBlock(x+1,y,z) == 0) {
-                    geo = new Geometry("OurQuad", quad);
+                    geo = new Geometry("", quad);
                     geo.setLocalTranslation(1 + x + chunkX, 0 + y, 0 + z + chunkZ);
                     geo.rotate(0,  FastMath.HALF_PI, 0);
                     meshCollection.add(geo);
@@ -60,7 +62,7 @@ public class ChunkMesh extends Mesh{
 
                 //back
                 if (chunk.getBlock(x,y,z-1) == 0) {
-                    geo = new Geometry("OurQuad", quad);
+                    geo = new Geometry("", quad);
                     geo.setLocalTranslation(1 + x + chunkX, 0 + y, -1 + z + chunkZ);
                     geo.rotate(0,  FastMath.PI, 0);
                     meshCollection.add(geo);
@@ -68,7 +70,7 @@ public class ChunkMesh extends Mesh{
 
                 //left
                 if (chunk.getBlock(x-1,y,z) == 0) {
-                    geo = new Geometry("OurQuad", quad);
+                    geo = new Geometry("", quad);
                     geo.setLocalTranslation(0 + x + chunkX, 0 + y, -1 + z + chunkZ);
                     geo.rotate(0,  FastMath.PI + FastMath.HALF_PI, 0);
                     meshCollection.add(geo);
@@ -76,7 +78,7 @@ public class ChunkMesh extends Mesh{
 
                 //top
                 if (chunk.getBlock(x,y+1,z) == 0) {
-                    geo = new Geometry("OurQuad", quad);
+                    geo = new Geometry("", quad);
                     geo.setLocalTranslation(0 + x + chunkX, 1 + y, 0 + z + chunkZ);
                     geo.rotate( FastMath.PI  + FastMath.HALF_PI, 0, 0);
                     meshCollection.add(geo);
@@ -84,7 +86,7 @@ public class ChunkMesh extends Mesh{
 
                 //bottom
                 if (chunk.getBlock(x,y-1,z) == 0) {
-                    geo = new Geometry("OurQuad", quad);
+                    geo = new Geometry("", quad);
                     geo.setLocalTranslation(0 + x + chunkX, 0 + y, 0 + z + chunkZ);
                     geo.rotate(FastMath.HALF_PI, FastMath.HALF_PI, 0);
                     meshCollection.add(geo);
@@ -107,9 +109,14 @@ public class ChunkMesh extends Mesh{
 
         GeometryBatchFactory.mergeGeometries(meshCollection,finalizedChunkMesh);
 
+        //finalizedChunkMesh.scaleTextureCoordinates(new Vector2f((byte)1,(byte)1));
+
         geo = new Geometry("test", finalizedChunkMesh);
 
-        geo.setMaterial(Loader.loadMaterial("dirt.png", assetManager));
+
+        Material newMat = Loader.getTextureAtlas();
+
+        geo.setMaterial(newMat);
 
 
         finalizedChunkMesh = null;
@@ -118,7 +125,7 @@ public class ChunkMesh extends Mesh{
 
         System.gc();
 
-        //chunky.scaleTextureCoordinates(new Vector2f(2,2));
+
 
         //System.gc();
 //        long endTime = System.currentTimeMillis();
