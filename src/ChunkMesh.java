@@ -7,17 +7,23 @@ import com.jme3.scene.Node;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.scene.shape.Quad;
 import com.jme3.texture.Texture;
+import com.jme3.util.BufferUtils;
 import jdk.swing.interop.SwingInterOpUtils;
 import jme3tools.optimize.GeometryBatchFactory;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class ChunkMesh extends Mesh{
     private final static short chunkSizeX = 16;
     private final static short chunkSizeY = 128;
     private final static short chunkSizeZ = 16;
+
+    private final static int[] indexes = { 2,0,1, 1,3,2 };
 
     public static Geometry genChunkMesh(Chunk chunk, AssetManager assetManager, int chunkX, int chunkZ){
 //        long startTime = System.currentTimeMillis();
@@ -26,73 +32,139 @@ public class ChunkMesh extends Mesh{
         int y = 0;
         int z = 0;
 
+        int count = 0;
+
         chunkX *= chunkSizeX;
         chunkZ *= chunkSizeZ;
 
-        Quad quad = new Quad((byte)1, (byte)1); //The quad worker object
+        Mesh mesh = new Mesh();
 
-        Collection<Geometry> meshCollection = new ArrayList();
+        //initialize lists
+        ArrayList<Vector3f> vertices = new ArrayList();
+        ArrayList<Vector2f> texCoord = new ArrayList();
+        ArrayList indexArray = new ArrayList();
 
-        Geometry geo; // using Quad object
-        int block;
+        for (int w = 0; w < (chunkSizeX * chunkSizeY * chunkSizeZ); w++) {
+/////////////////////////////////////////////////////////////////////////////////////
+            //TODO front
+            if (chunk.getBlock(x,y,z-1) == 0) {
+                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-        for (int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++) {
-            block = chunk.getBlock(x,y,z);
+                texCoord.add(new Vector2f(0, 0));
+                texCoord.add(new Vector2f(1, 0));
+                texCoord.add(new Vector2f(0, 1));
+                texCoord.add(new Vector2f(1, 1));
 
-            if( block > 0) {
-                //TODO: optimize this further
-                //TODO: put this on a short term thread to return then terminate thread
-                //front
-
-
-                if (chunk.getBlock(x,y,z+1) == 0) {
-                    geo = new Geometry("", quad);
-                    geo.setLocalTranslation(0 + x + chunkX, 0 + y, 0 + z + chunkZ);
-                    meshCollection.add(geo);
+                //add the index data using the count
+                for (int i = 0; i < 6; i++) {
+                    indexArray.add(indexes[i] + count);
                 }
 
-
-                //right
-                if (chunk.getBlock(x+1,y,z) == 0) {
-                    geo = new Geometry("", quad);
-                    geo.setLocalTranslation(1 + x + chunkX, 0 + y, 0 + z + chunkZ);
-                    geo.rotate(0,  FastMath.HALF_PI, 0);
-                    meshCollection.add(geo);
-                }
-
-                //back
-                if (chunk.getBlock(x,y,z-1) == 0) {
-                    geo = new Geometry("", quad);
-                    geo.setLocalTranslation(1 + x + chunkX, 0 + y, -1 + z + chunkZ);
-                    geo.rotate(0,  FastMath.PI, 0);
-                    meshCollection.add(geo);
-                }
-
-                //left
-                if (chunk.getBlock(x-1,y,z) == 0) {
-                    geo = new Geometry("", quad);
-                    geo.setLocalTranslation(0 + x + chunkX, 0 + y, -1 + z + chunkZ);
-                    geo.rotate(0,  FastMath.PI + FastMath.HALF_PI, 0);
-                    meshCollection.add(geo);
-                }
-
-                //top
-                if (chunk.getBlock(x,y+1,z) == 0) {
-                    geo = new Geometry("", quad);
-                    geo.setLocalTranslation(0 + x + chunkX, 1 + y, 0 + z + chunkZ);
-                    geo.rotate( FastMath.PI  + FastMath.HALF_PI, 0, 0);
-                    meshCollection.add(geo);
-                }
-
-                //bottom
-                if (chunk.getBlock(x,y-1,z) == 0) {
-                    geo = new Geometry("", quad);
-                    geo.setLocalTranslation(0 + x + chunkX, 0 + y, 0 + z + chunkZ);
-                    geo.rotate(FastMath.HALF_PI, FastMath.HALF_PI, 0);
-                    meshCollection.add(geo);
-                }
-
+                count += 4;
             }
+/////////////////////////////////////////////////////////////////////////////////////
+            //TODO back
+            if (chunk.getBlock(x,y,z+1) == 0) {
+                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+
+                texCoord.add(new Vector2f(0, 0));
+                texCoord.add(new Vector2f(1, 0));
+                texCoord.add(new Vector2f(0, 1));
+                texCoord.add(new Vector2f(1, 1));
+
+                //add the index data using the count
+                for (int i = 0; i < 6; i++) {
+                    indexArray.add(indexes[i] + count);
+                }
+                count += 4;
+            }
+/////////////////////////////////////////////////////////////////////////////////////
+            if (chunk.getBlock(x+1,y,z) == 0) {
+                //TODO right
+                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+
+                texCoord.add(new Vector2f(0, 0));
+                texCoord.add(new Vector2f(1, 0));
+                texCoord.add(new Vector2f(0, 1));
+                texCoord.add(new Vector2f(1, 1));
+
+                //add the index data using the count
+                for (int i = 0; i < 6; i++) {
+                    indexArray.add(indexes[i] + count);
+                }
+
+                count += 4;
+            }
+/////////////////////////////////////////////////////////////////////////////////////
+            //TODO left
+            if (chunk.getBlock(x-1,y,z) == 0) {
+                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+
+                texCoord.add(new Vector2f(0, 0));
+                texCoord.add(new Vector2f(1, 0));
+                texCoord.add(new Vector2f(0, 1));
+                texCoord.add(new Vector2f(1, 1));
+
+                //add the index data using the count
+                for (int i = 0; i < 6; i++) {
+                    indexArray.add(indexes[i] + count);
+                }
+
+                count += 4;
+            }
+/////////////////////////////////////////////////////////////////////////////////////
+            //TODO up
+            if (chunk.getBlock(x,y+1,z) == 0) {
+                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+
+                texCoord.add(new Vector2f(0, 0));
+                texCoord.add(new Vector2f(1, 0));
+                texCoord.add(new Vector2f(0, 1));
+                texCoord.add(new Vector2f(1, 1));
+
+                //add the index data using the count
+                for (int i = 0; i < 6; i++) {
+                    indexArray.add(indexes[i] + count);
+                }
+
+                count += 4;
+            }
+/////////////////////////////////////////////////////////////////////////////////////
+            //TODO down
+            if (chunk.getBlock(x,y-1,z) == 0 && y != 0) {
+                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+
+                texCoord.add(new Vector2f(0, 0));
+                texCoord.add(new Vector2f(1, 0));
+                texCoord.add(new Vector2f(0, 1));
+                texCoord.add(new Vector2f(1, 1));
+
+                //add the index data using the count
+                for (int i = 0; i < 6; i++) {
+                    indexArray.add(indexes[i] + count);
+                }
+
+                count += 4;
+            }
+/////////////////////////////////////////////////////////////////////////////////////
 
             y++;
             if( y > chunkSizeY - 1 ){
@@ -104,33 +176,27 @@ public class ChunkMesh extends Mesh{
                 }
             }
         }
+        //group together the vertices
+        Vector3f[] verticesV3F = vertices.toArray(new Vector3f[0]);
 
-        Mesh finalizedChunkMesh = new Mesh();
+        //group together texture coordinates
+        Vector2f[] texCoord2F = texCoord.toArray(new Vector2f[0]);
 
-        GeometryBatchFactory.mergeGeometries(meshCollection,finalizedChunkMesh);
-
-        //finalizedChunkMesh.scaleTextureCoordinates(new Vector2f((byte)1,(byte)1));
-
-        geo = new Geometry("test", finalizedChunkMesh);
-
-
-        Material newMat = Loader.getTextureAtlas();
-
-        geo.setMaterial(newMat);
-
-
-        finalizedChunkMesh = null;
-        meshCollection = null;
-        quad = null;
-
-        System.gc();
+        //group together indexes
+        int vertexLength = indexArray.toArray().length;
+        int[] indexPrimative = new int[vertexLength];
+        for (int i = 0; i < vertexLength; i++){
+            indexPrimative[i] = (int)indexArray.get(i);
+        }
 
 
+        mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(verticesV3F));
+        mesh.setBuffer(VertexBuffer.Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord2F));
+        mesh.setBuffer(VertexBuffer.Type.Index,    3, BufferUtils.createIntBuffer(indexPrimative));
+        mesh.updateBound();
 
-        //System.gc();
-//        long endTime = System.currentTimeMillis();
-//        double timeElapsed = (double)(endTime - startTime)/1000;
-//        System.out.println("Mesh gen time: " + timeElapsed + " seconds");
+        Geometry geo = new Geometry("OurMesh", mesh); // using our custom mesh object
+        geo.setMaterial(Loader.getTextureAtlas());
 
         return geo;
     }

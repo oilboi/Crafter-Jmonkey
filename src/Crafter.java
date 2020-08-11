@@ -61,10 +61,11 @@ public class Crafter extends SimpleApplication {
 
         rootNode.setCullHint(Spatial.CullHint.Never);
 
+        //used statically. Object initialized here for loading textures
         Loader textureLoader = new Loader(assetManager);
     }
 
-    private int renderDistance = 20;
+    private int renderDistance = 40;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -76,15 +77,13 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf){
 
-        //this is warmup gc then gen 1 chunk
-//        if (counter > 1000 && !genned) {
+        //this is for warming up vm then gen 1 chunk
+//        if (counter > 5 && !genned) {
 //            long startTime = System.currentTimeMillis();
 //            Chunk chunk = new Chunk();
-//            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, 0, 0);
+//            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, 0, -2);
 //            rootNode.attachChild(geo);
-//            System.gc();
 //            genned = true;
-//
 //            long endTime = System.currentTimeMillis();
 //            double timeElapsed = (double)(endTime - startTime)/1000;
 //            System.out.println("Chunk init time: " + timeElapsed + " seconds");
@@ -102,16 +101,17 @@ public class Crafter extends SimpleApplication {
             long endTime = System.currentTimeMillis();
             double timeElapsed = (double)(endTime - startTime)/1000;
             System.out.println("Chunk init time: " + timeElapsed + " seconds");
+
             rootNode.attachChild(geo);
 
-            //System.out.println(x + " " + z);
-            chunk = null;
-            geo = null;
-
-            System.gc();
-
-
             counter = 0;
+
+//            int mb = 1024*1024;
+//
+//            Runtime runtime = Runtime.getRuntime();
+//            //Print used memory
+//            System.out.println("Used Memory:"
+//                    + (runtime.totalMemory() - runtime.freeMemory()) / mb);
             x++;
             if (x > renderDistance) {
                 x = -renderDistance;
@@ -119,23 +119,6 @@ public class Crafter extends SimpleApplication {
             }
         }
 
-
-//        if (count < 20) {
-//            count++;
-//            Chunk chunky = new Chunk();
-//
-//            Geometry geo = ChunkMesh.genChunkMesh(chunky, assetManager);
-//
-//            rootNode.attachChild(geo);
-//        }
-
-//        Display.setLocation((int)(Math.random()*1000), (int)(Math.random() * 1000));
-//
-//        byte[] array = new byte[30];
-//        new Random().nextBytes(array);
-//        String generatedString = new String(array, Charset.forName("UTF-8"));
-//
-//        Display.setTitle(generatedString);
     }
 
 
