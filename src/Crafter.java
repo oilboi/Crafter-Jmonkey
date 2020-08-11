@@ -65,7 +65,7 @@ public class Crafter extends SimpleApplication {
         Loader textureLoader = new Loader(assetManager);
     }
 
-    private int renderDistance = 3;
+    private int renderDistance = 10;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -117,6 +117,12 @@ public class Crafter extends SimpleApplication {
                 x = -renderDistance;
                 z++;
             }
+        } else if(z == renderDistance){
+            x  = z = -renderDistance;
+
+            counter = 0;
+
+            rootNode.detachAllChildren();
         }
 
     }
