@@ -46,126 +46,127 @@ public class ChunkMesh extends Mesh{
 
         for (int w = 0; w < (chunkSizeX * chunkSizeY * chunkSizeZ); w++) {
 /////////////////////////////////////////////////////////////////////////////////////
-            //TODO front
-            if (chunk.getBlock(x,y,z-1) == 0) {
-                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
+            if (chunk.getBlock(x,y,z) != 0) {
+                //TODO front
+                if (chunk.getBlock(x, y, z - 1) == 0) {
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-                texCoord.add(new Vector2f(0, 0));
-                texCoord.add(new Vector2f(1, 0));
-                texCoord.add(new Vector2f(0, 1));
-                texCoord.add(new Vector2f(1, 1));
+                    texCoord.add(new Vector2f(0, 0));
+                    texCoord.add(new Vector2f(1, 0));
+                    texCoord.add(new Vector2f(0, 1));
+                    texCoord.add(new Vector2f(1, 1));
 
-                //add the index data using the count
-                for (int i = 0; i < 6; i++) {
-                    indexArray.add(indexes[i] + count);
+                    //add the index data using the count
+                    for (int i = 0; i < 6; i++) {
+                        indexArray.add(indexes[i] + count);
+                    }
+
+                    count += 4;
                 }
-
-                count += 4;
-            }
 /////////////////////////////////////////////////////////////////////////////////////
-            //TODO back
-            if (chunk.getBlock(x,y,z+1) == 0) {
-                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                //TODO back
+                if (chunk.getBlock(x, y, z + 1) == 0) {
+                    vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
 
-                texCoord.add(new Vector2f(0, 0));
-                texCoord.add(new Vector2f(1, 0));
-                texCoord.add(new Vector2f(0, 1));
-                texCoord.add(new Vector2f(1, 1));
+                    texCoord.add(new Vector2f(0, 0));
+                    texCoord.add(new Vector2f(1, 0));
+                    texCoord.add(new Vector2f(0, 1));
+                    texCoord.add(new Vector2f(1, 1));
 
-                //add the index data using the count
-                for (int i = 0; i < 6; i++) {
-                    indexArray.add(indexes[i] + count);
+                    //add the index data using the count
+                    for (int i = 0; i < 6; i++) {
+                        indexArray.add(indexes[i] + count);
+                    }
+                    count += 4;
                 }
-                count += 4;
-            }
 /////////////////////////////////////////////////////////////////////////////////////
-            if (chunk.getBlock(x+1,y,z) == 0) {
-                //TODO right
-                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                if (chunk.getBlock(x + 1, y, z) == 0) {
+                    //TODO right
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-                texCoord.add(new Vector2f(0, 0));
-                texCoord.add(new Vector2f(1, 0));
-                texCoord.add(new Vector2f(0, 1));
-                texCoord.add(new Vector2f(1, 1));
+                    texCoord.add(new Vector2f(0, 0));
+                    texCoord.add(new Vector2f(1, 0));
+                    texCoord.add(new Vector2f(0, 1));
+                    texCoord.add(new Vector2f(1, 1));
 
-                //add the index data using the count
-                for (int i = 0; i < 6; i++) {
-                    indexArray.add(indexes[i] + count);
+                    //add the index data using the count
+                    for (int i = 0; i < 6; i++) {
+                        indexArray.add(indexes[i] + count);
+                    }
+
+                    count += 4;
                 }
-
-                count += 4;
-            }
 /////////////////////////////////////////////////////////////////////////////////////
-            //TODO left
-            if (chunk.getBlock(x-1,y,z) == 0) {
-                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                //TODO left
+                if (chunk.getBlock(x - 1, y, z) == 0) {
+                    vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
 
-                texCoord.add(new Vector2f(0, 0));
-                texCoord.add(new Vector2f(1, 0));
-                texCoord.add(new Vector2f(0, 1));
-                texCoord.add(new Vector2f(1, 1));
+                    texCoord.add(new Vector2f(0, 0));
+                    texCoord.add(new Vector2f(1, 0));
+                    texCoord.add(new Vector2f(0, 1));
+                    texCoord.add(new Vector2f(1, 1));
 
-                //add the index data using the count
-                for (int i = 0; i < 6; i++) {
-                    indexArray.add(indexes[i] + count);
+                    //add the index data using the count
+                    for (int i = 0; i < 6; i++) {
+                        indexArray.add(indexes[i] + count);
+                    }
+
+                    count += 4;
                 }
-
-                count += 4;
-            }
 /////////////////////////////////////////////////////////////////////////////////////
-            //TODO up
-            if (chunk.getBlock(x,y+1,z) == 0) {
-                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                //TODO up
+                if (chunk.getBlock(x, y + 1, z) == 0) {
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-                texCoord.add(new Vector2f(0, 0));
-                texCoord.add(new Vector2f(1, 0));
-                texCoord.add(new Vector2f(0, 1));
-                texCoord.add(new Vector2f(1, 1));
+                    texCoord.add(new Vector2f(0, 0));
+                    texCoord.add(new Vector2f(1, 0));
+                    texCoord.add(new Vector2f(0, 1));
+                    texCoord.add(new Vector2f(1, 1));
 
-                //add the index data using the count
-                for (int i = 0; i < 6; i++) {
-                    indexArray.add(indexes[i] + count);
+                    //add the index data using the count
+                    for (int i = 0; i < 6; i++) {
+                        indexArray.add(indexes[i] + count);
+                    }
+
+                    count += 4;
                 }
-
-                count += 4;
-            }
 /////////////////////////////////////////////////////////////////////////////////////
-            //TODO down
-            if (chunk.getBlock(x,y-1,z) == 0 && y != 0) {
-                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                //TODO down
+                if (chunk.getBlock(x, y - 1, z) == 0 && y != 0) {
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
 
-                texCoord.add(new Vector2f(0, 0));
-                texCoord.add(new Vector2f(1, 0));
-                texCoord.add(new Vector2f(0, 1));
-                texCoord.add(new Vector2f(1, 1));
+                    texCoord.add(new Vector2f(0, 0));
+                    texCoord.add(new Vector2f(1, 0));
+                    texCoord.add(new Vector2f(0, 1));
+                    texCoord.add(new Vector2f(1, 1));
 
-                //add the index data using the count
-                for (int i = 0; i < 6; i++) {
-                    indexArray.add(indexes[i] + count);
+                    //add the index data using the count
+                    for (int i = 0; i < 6; i++) {
+                        indexArray.add(indexes[i] + count);
+                    }
+
+                    count += 4;
                 }
-
-                count += 4;
-            }
 /////////////////////////////////////////////////////////////////////////////////////
-
+            }
             y++;
             if( y > chunkSizeY - 1 ){
                 y = 0;

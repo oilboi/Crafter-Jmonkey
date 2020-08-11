@@ -12,8 +12,8 @@ public class Chunk {
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
     public Chunk(){
-//        genRandom(); //this is for performance testing and uses A LOT of memory
-        genDebug();
+        genRandom(); //this is for performance testing and uses A LOT of memory
+//        genDebug();
     }
 
     public short[] getBlocks(){
