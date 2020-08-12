@@ -8,6 +8,7 @@ public class Loader {
     public Loader(AssetManager assetManager){
         Texture texture = assetManager.loadTexture("textureAtlas.png");
         texture.setMagFilter(Texture.MagFilter.Nearest);
+        texture.setMinFilter(Texture.MinFilter.NearestNoMipMaps);
         Material mat = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setTexture("ColorMap", texture);
