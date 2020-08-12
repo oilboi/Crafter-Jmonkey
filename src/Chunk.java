@@ -31,7 +31,7 @@ public class Chunk {
         int y = 0;
         int z = 0;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
-            block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomFloat() * 5);
+            block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomInt(0,5));
             y++;
             if( y > chunkSizeY - 1){
                 y = 0;
@@ -62,7 +62,7 @@ public class Chunk {
 
         short counter = 0;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
-            short newBlock = (short)(Math.ceil(Math.random()*4));
+            short newBlock = (short)(FastMath.nextRandomInt(0,5));
 //            counter++;
 //            if (counter > 19){
 //                counter = 0;

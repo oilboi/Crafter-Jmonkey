@@ -8,6 +8,7 @@ public class TextureCalculator {
     private static final byte pixel = 16;
 
     public static float[] calculateTextureMap(short id){
+        id -= 1;
         byte y = (byte)FastMath.floor(id / sizeX);
         byte x = (byte)FastMath.floor(id - (sizeX * y));
 

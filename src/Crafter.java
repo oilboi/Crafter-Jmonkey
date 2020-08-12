@@ -55,7 +55,7 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        flyCam.setMoveSpeed(100);
+        flyCam.setMoveSpeed(10);
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 
@@ -65,7 +65,7 @@ public class Crafter extends SimpleApplication {
         Loader textureLoader = new Loader(assetManager);
     }
 
-    private int renderDistance = 3;
+    private int renderDistance = 8;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -106,12 +106,6 @@ public class Crafter extends SimpleApplication {
 
             counter = 0;
 
-            int mb = 1024 * 1024;
-
-            Runtime runtime = Runtime.getRuntime();
-            //Print used memory
-            System.out.println("Used Memory:"
-                    + (runtime.totalMemory() - runtime.freeMemory()) / mb);
             x++;
             if (x > renderDistance) {
                 x = -renderDistance;
