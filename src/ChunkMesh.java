@@ -64,10 +64,10 @@ public class ChunkMesh extends Mesh{
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
-                    texCoord.add(new Vector2f(textureMaps[0], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 1));
-                    texCoord.add(new Vector2f(textureMaps[0], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[3]));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[3]));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -90,10 +90,10 @@ public class ChunkMesh extends Mesh{
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
-                    texCoord.add(new Vector2f(textureMaps[0], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 1));
-                    texCoord.add(new Vector2f(textureMaps[0], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[3]));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[3]));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -113,10 +113,10 @@ public class ChunkMesh extends Mesh{
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
-                    texCoord.add(new Vector2f(textureMaps[0], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 1));
-                    texCoord.add(new Vector2f(textureMaps[0], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[3]));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[3]));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -137,10 +137,10 @@ public class ChunkMesh extends Mesh{
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
-                    texCoord.add(new Vector2f(textureMaps[0], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 1));
-                    texCoord.add(new Vector2f(textureMaps[0], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[3]));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[3]));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -161,10 +161,10 @@ public class ChunkMesh extends Mesh{
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
-                    texCoord.add(new Vector2f(textureMaps[0], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 1));
-                    texCoord.add(new Vector2f(textureMaps[0], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[3]));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[3]));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -185,10 +185,10 @@ public class ChunkMesh extends Mesh{
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
-                    texCoord.add(new Vector2f(textureMaps[0], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 0));
-                    texCoord.add(new Vector2f(textureMaps[1], 1));
-                    texCoord.add(new Vector2f(textureMaps[0], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[2]));
+                    texCoord.add(new Vector2f(textureMaps[1], textureMaps[3]));
+                    texCoord.add(new Vector2f(textureMaps[0], textureMaps[3]));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
