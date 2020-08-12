@@ -17,8 +17,8 @@ public class Chunk {
 //        } else {
 //        genDebug();
 //        }
-//        genDebug();
-        genRandom();
+        genDebug();
+//        genRandom();
     }
 
     public short[] getBlocks(){
@@ -62,7 +62,7 @@ public class Chunk {
 
         short counter = 0;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
-            short newBlock = (short)(FastMath.nextRandomInt(0,5));
+            short newBlock = (short)(FastMath.nextRandomInt(1,5));
 //            counter++;
 //            if (counter > 19){
 //                counter = 0;
