@@ -23,7 +23,7 @@ public class ChunkMesh extends Mesh{
     private final static short chunkSizeY = 128;
     private final static short chunkSizeZ = 16;
 
-    private final static int[] indexes = { 2,0,1, 1,3,2 };
+    private final static int[] indexes = { 0,1,2, 0,2,3 };
 
     public static Geometry genChunkMesh(Chunk chunk, AssetManager assetManager, int chunkX, int chunkZ){
 //        long startTime = System.currentTimeMillis();
@@ -44,20 +44,30 @@ public class ChunkMesh extends Mesh{
         ArrayList<Vector2f> texCoord = new ArrayList();
         ArrayList indexArray = new ArrayList();
 
+        short neighborBlock;
+        float[] textureMaps;
+        short blockID;
         for (int w = 0; w < (chunkSizeX * chunkSizeY * chunkSizeZ); w++) {
+
+            blockID = chunk.getBlock(x,y,z);
+            if (blockID != 0) {
 /////////////////////////////////////////////////////////////////////////////////////
-            if (chunk.getBlock(x,y,z) != 0) {
+
                 //TODO front
-                if (chunk.getBlock(x, y, z - 1) == 0) {
+                neighborBlock = chunk.getBlock(x, y, z - 1);
+                if (neighborBlock == 0) {
                     vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
                     vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
-                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-                    texCoord.add(new Vector2f(0, 0));
-                    texCoord.add(new Vector2f(1, 0));
-                    texCoord.add(new Vector2f(0, 1));
-                    texCoord.add(new Vector2f(1, 1));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+
+                    textureMaps = TextureCalculator.calculateTextureMap(blockID);
+
+                    texCoord.add(new Vector2f(textureMaps[0], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], 1));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -66,18 +76,24 @@ public class ChunkMesh extends Mesh{
 
                     count += 4;
                 }
+
 /////////////////////////////////////////////////////////////////////////////////////
+
                 //TODO back
-                if (chunk.getBlock(x, y, z + 1) == 0) {
+                neighborBlock = chunk.getBlock(x, y, z + 1);
+                if (neighborBlock == 0) {
                     vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
                     vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
                     vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
 
-                    texCoord.add(new Vector2f(0, 0));
-                    texCoord.add(new Vector2f(1, 0));
-                    texCoord.add(new Vector2f(0, 1));
-                    texCoord.add(new Vector2f(1, 1));
+
+                    textureMaps = TextureCalculator.calculateTextureMap(blockID);
+
+                    texCoord.add(new Vector2f(textureMaps[0], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], 1));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -86,17 +102,21 @@ public class ChunkMesh extends Mesh{
                     count += 4;
                 }
 /////////////////////////////////////////////////////////////////////////////////////
-                if (chunk.getBlock(x + 1, y, z) == 0) {
-                    //TODO right
+
+                //TODO right
+                neighborBlock = chunk.getBlock(x + 1, y, z);
+                if (neighborBlock == 0) {
                     vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
                     vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
-                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
                     vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
 
-                    texCoord.add(new Vector2f(0, 0));
-                    texCoord.add(new Vector2f(1, 0));
-                    texCoord.add(new Vector2f(0, 1));
-                    texCoord.add(new Vector2f(1, 1));
+                    textureMaps = TextureCalculator.calculateTextureMap(blockID);
+
+                    texCoord.add(new Vector2f(textureMaps[0], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], 1));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -106,17 +126,21 @@ public class ChunkMesh extends Mesh{
                     count += 4;
                 }
 /////////////////////////////////////////////////////////////////////////////////////
+
                 //TODO left
-                if (chunk.getBlock(x - 1, y, z) == 0) {
+                neighborBlock = chunk.getBlock(x - 1, y, z);
+                if (neighborBlock == 0) {
                     vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
                     vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
                     vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-                    texCoord.add(new Vector2f(0, 0));
-                    texCoord.add(new Vector2f(1, 0));
-                    texCoord.add(new Vector2f(0, 1));
-                    texCoord.add(new Vector2f(1, 1));
+                    textureMaps = TextureCalculator.calculateTextureMap(blockID);
+
+                    texCoord.add(new Vector2f(textureMaps[0], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], 1));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -126,17 +150,21 @@ public class ChunkMesh extends Mesh{
                     count += 4;
                 }
 /////////////////////////////////////////////////////////////////////////////////////
+
                 //TODO up
-                if (chunk.getBlock(x, y + 1, z) == 0) {
+                neighborBlock = chunk.getBlock(x, y + 1, z);
+                if (neighborBlock == 0) {
                     vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 1 + z + chunkZ));
                     vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 1 + z + chunkZ));
-                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
                     vertices.add(new Vector3f(1 + x + chunkX, 1 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(0 + x + chunkX, 1 + y, 0 + z + chunkZ));
 
-                    texCoord.add(new Vector2f(0, 0));
-                    texCoord.add(new Vector2f(1, 0));
-                    texCoord.add(new Vector2f(0, 1));
-                    texCoord.add(new Vector2f(1, 1));
+                    textureMaps = TextureCalculator.calculateTextureMap(blockID);
+
+                    texCoord.add(new Vector2f(textureMaps[0], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], 1));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -146,17 +174,21 @@ public class ChunkMesh extends Mesh{
                     count += 4;
                 }
 /////////////////////////////////////////////////////////////////////////////////////
+
                 //TODO down
-                if (chunk.getBlock(x, y - 1, z) == 0 && y != 0) {
+                neighborBlock = chunk.getBlock(x, y - 1, z);
+                if (neighborBlock == 0 && y != 0) {
                     vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 1 + z + chunkZ));
                     vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 1 + z + chunkZ));
-                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
                     vertices.add(new Vector3f(0 + x + chunkX, 0 + y, 0 + z + chunkZ));
+                    vertices.add(new Vector3f(1 + x + chunkX, 0 + y, 0 + z + chunkZ));
 
-                    texCoord.add(new Vector2f(0, 0));
-                    texCoord.add(new Vector2f(1, 0));
-                    texCoord.add(new Vector2f(0, 1));
-                    texCoord.add(new Vector2f(1, 1));
+                    textureMaps = TextureCalculator.calculateTextureMap(blockID);
+
+                    texCoord.add(new Vector2f(textureMaps[0], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 0));
+                    texCoord.add(new Vector2f(textureMaps[1], 1));
+                    texCoord.add(new Vector2f(textureMaps[0], 1));
 
                     //add the index data using the count
                     for (int i = 0; i < 6; i++) {
@@ -166,6 +198,7 @@ public class ChunkMesh extends Mesh{
                     count += 4;
                 }
 /////////////////////////////////////////////////////////////////////////////////////
+
             }
             y++;
             if( y > chunkSizeY - 1 ){

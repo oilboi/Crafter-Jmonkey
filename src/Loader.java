@@ -6,7 +6,7 @@ public class Loader {
     private static Material textureAtlas;
 
     public Loader(AssetManager assetManager){
-        Texture texture = assetManager.loadTexture("dirt.png");
+        Texture texture = assetManager.loadTexture("textureAtlas.png");
         texture.setMagFilter(Texture.MagFilter.Nearest);
         Material mat = new Material(assetManager,
                 "Common/MatDefs/Misc/Unshaded.j3md");

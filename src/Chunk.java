@@ -12,11 +12,13 @@ public class Chunk {
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
     public Chunk(){
-        if (Math.random() > 0.5) {
-            genRandom(); //this is for performance testing and uses A LOT of memory
-        } else {
-        genDebug();
-        }
+//        if (Math.random() > 0.5) {
+//            genRandom(); //this is for performance testing and uses A LOT of memory
+//        } else {
+//        genDebug();
+//        }
+//        genDebug();
+        genRandom();
     }
 
     public short[] getBlocks(){
@@ -29,7 +31,7 @@ public class Chunk {
         int y = 0;
         int z = 0;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
-            block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomFloat() * 2);
+            block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomFloat() * 4);
             y++;
             if( y > chunkSizeY - 1){
                 y = 0;
@@ -42,7 +44,7 @@ public class Chunk {
         }
     }
 
-    public int getBlock(int x,int y,int z){
+    public short getBlock(int x,int y,int z){
         //TODO: attempt to return neighboring block if out of bounds of x or z
         if( x < 0 || x >= chunkSizeX || y < 0 || y >= chunkSizeY || z < 0 || z >= chunkSizeZ){
             return 0;
@@ -58,8 +60,18 @@ public class Chunk {
         int y = 0;
         int z = 0;
 
+        short counter = 0;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
-            short newBlock = 1;
+            short newBlock = (short)(Math.ceil(Math.random()*4));
+//            counter++;
+//            if (counter > 19){
+//                counter = 0;
+//            }
+
+//            System.out.println(newBlock);
+
+
+            //TextureCalculator.calculateTextureMap(newBlock);
 
             int hashedPos = ChunkMath.genHash(x, y, z);
 
