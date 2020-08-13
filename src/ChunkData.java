@@ -45,4 +45,21 @@ public class ChunkData {
 
         return blocksYo[hashy];
     }
+
+    public static boolean chunkExists(int chunkX, int chunkZ){
+
+        //safety checks
+        if(chunkArray.length < chunkX-1 || chunkX < 0){
+            return false;
+        }
+        if(chunkArray.length < chunkZ-1 || chunkZ < 0){
+            return false;
+        }
+        //check if chunk exists
+        if ( chunkArray[chunkX][chunkZ] == null){
+            return false;
+        }
+        //all checks pass
+        return true;
+    }
 }

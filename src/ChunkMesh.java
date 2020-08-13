@@ -1,3 +1,4 @@
+import com.jme3.app.state.RootNodeAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.*;
@@ -22,10 +23,19 @@ public class ChunkMesh extends Mesh{
     private final static short chunkSizeX = 16;
     private final static short chunkSizeY = 128;
     private final static short chunkSizeZ = 16;
-
+    private static int renderDistance = Crafter.getRenderDistance();
     private final static int[] indexes = { 0,1,2, 0,2,3 };
 
-    public static Geometry genChunkMesh(Chunk chunk, AssetManager assetManager, int chunkX, int chunkZ){
+    public static void genChunkMesh(Chunk chunk, AssetManager assetManager, int chunkX, int chunkZ, Node rootNode, boolean updating){
+
+        if (rootNode.getChild(chunkX+" "+chunkZ) != null){
+            rootNode.detachChildNamed(chunkX+" "+chunkZ);
+
+            System.out.println("node " + chunkX + " " + chunkZ + " is detached");
+        }  else {
+            //System.out.println(chunkX + " " + chunkZ + " doesn't exist :D");
+        }
+
 //        long startTime = System.currentTimeMillis();
         //set up data
         int x = 0;
@@ -35,7 +45,7 @@ public class ChunkMesh extends Mesh{
         int count = 0;
 
         int chunkLocationX = chunkX * chunkSizeX;
-        int chunkLocatoinZ = chunkZ * chunkSizeZ;
+        int chunkLocationZ = chunkZ * chunkSizeZ;
 
         Mesh mesh = new Mesh();
 
@@ -56,11 +66,11 @@ public class ChunkMesh extends Mesh{
                 //TODO front
                 neighborBlock = chunk.getBlock(x, y, z - 1, chunkX, chunkZ);
                 if (neighborBlock == 0) {
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 0 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 0 + z + chunkLocationZ));
 
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 0 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 0 + z + chunkLocationZ));
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
@@ -82,10 +92,10 @@ public class ChunkMesh extends Mesh{
                 //TODO back
                 neighborBlock = chunk.getBlock(x, y, z + 1, chunkX, chunkZ);
                 if (neighborBlock == 0) {
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 1 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 1 + z + chunkLocationZ));
 
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
@@ -106,10 +116,10 @@ public class ChunkMesh extends Mesh{
                 //TODO right
                 neighborBlock = chunk.getBlock(x + 1, y, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 1 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 1 + z + chunkLocationZ));
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
@@ -130,10 +140,10 @@ public class ChunkMesh extends Mesh{
                 //TODO left
                 neighborBlock = chunk.getBlock(x - 1, y, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 0 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 0 + z + chunkLocationZ));
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
@@ -154,10 +164,10 @@ public class ChunkMesh extends Mesh{
                 //TODO up
                 neighborBlock = chunk.getBlock(x, y + 1, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 0 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 1 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 1 + y, 0 + z + chunkLocationZ));
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
@@ -178,10 +188,10 @@ public class ChunkMesh extends Mesh{
                 //TODO down
                 neighborBlock = chunk.getBlock(x, y - 1, z, chunkX, chunkZ);
                 if (neighborBlock == 0 && y != 0) {
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 1 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 0 + z + chunkLocatoinZ));
-                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 0 + z + chunkLocatoinZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 1 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(0 + x + chunkLocationX, 0 + y, 0 + z + chunkLocationZ));
+                    vertices.add(new Vector3f(1 + x + chunkLocationX, 0 + y, 0 + z + chunkLocationZ));
 
                     textureMaps = TextureCalculator.calculateTextureMap(blockID);
 
@@ -224,14 +234,38 @@ public class ChunkMesh extends Mesh{
         }
 
 
+        //update buffers
         mesh.setBuffer(VertexBuffer.Type.Position, 3, BufferUtils.createFloatBuffer(verticesV3F));
         mesh.setBuffer(VertexBuffer.Type.TexCoord, 2, BufferUtils.createFloatBuffer(texCoord2F));
         mesh.setBuffer(VertexBuffer.Type.Index,    3, BufferUtils.createIntBuffer(indexPrimative));
         mesh.updateBound();
 
-        Geometry geo = new Geometry("OurMesh", mesh); // using our custom mesh object
+        //turn geometry to an object and apply textureAtlas
+        Geometry geo = new Geometry(chunkX+" "+chunkZ, mesh);
         geo.setMaterial(Loader.getTextureAtlas());
 
-        return geo;
+        rootNode.attachChild(geo);
+
+        if(!updating) {
+            updateNeighbors(assetManager, chunkX, chunkZ, rootNode);
+        }
+    }
+
+    public static void updateNeighbors( AssetManager assetManager, int chunkX, int chunkZ, Node rootNode){
+        for (int x = -1; x < 1; x++){
+            for (int z = -1; z < 1; z++){
+                if (FastMath.abs(x) + FastMath.abs(z) == 1) {
+                    if (ChunkData.chunkExists(chunkX + x + renderDistance, chunkZ + z + renderDistance)) {
+
+
+                        Chunk chunky = ChunkData.getChunkData(chunkX + x, chunkZ + z);
+                        //System.out.println(chunkX + x + " | " + chunkZ + z + " is updating!");
+
+
+                        ChunkMesh.genChunkMesh(chunky, assetManager, chunkX + x, chunkZ + z, rootNode, true);
+                    }
+                }
+            }
+        }
     }
 }

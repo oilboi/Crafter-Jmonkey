@@ -55,7 +55,7 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        flyCam.setMoveSpeed(10);
+        flyCam.setMoveSpeed(100);
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 
@@ -65,7 +65,7 @@ public class Crafter extends SimpleApplication {
         Loader textureLoader = new Loader(assetManager);
     }
 
-    private static int renderDistance = 2;
+    private static int renderDistance = 20;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -101,15 +101,19 @@ public class Crafter extends SimpleApplication {
         //this is for dynamic chunk generation
         counter++;
         if (counter > 5 && z <= renderDistance) {
-            long startTime = System.currentTimeMillis();
+//            long startTime = System.currentTimeMillis();
+
             chunk = new Chunk();
             ChunkData.storeChunk(x,z, chunk);
-            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
-            long endTime = System.currentTimeMillis();
-            double timeElapsed = (double) (endTime - startTime) / 1000;
-            System.out.println("Chunk init time: " + timeElapsed + " seconds");
+            ChunkMesh.genChunkMesh(chunk, assetManager, x, z, rootNode,false);
 
-            rootNode.attachChild(geo);
+//            long endTime = System.currentTimeMillis();
+//            double timeElapsed = (double) (endTime - startTime) / 1000;
+//            System.out.println("Chunk init time: " + timeElapsed + " seconds");
+
+            //ChunkMesh.updateNeighbors(chunk, assetManager, x, z, rootNode);
+
+            //rootNode.detachChildNamed()
 
             counter = 0;
 
