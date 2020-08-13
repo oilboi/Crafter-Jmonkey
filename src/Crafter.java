@@ -4,6 +4,7 @@ import com.jme3.asset.AssetKey;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.math.FastMath;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
@@ -55,7 +56,13 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        flyCam.setMoveSpeed(100);
+        flyCam.setMoveSpeed(10);
+
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension d = tk.getScreenSize();
+
+        cam.setFrustumPerspective(72,d.height/d.width, 0.01f, 1000f );
+
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 
