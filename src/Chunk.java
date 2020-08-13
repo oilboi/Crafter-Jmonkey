@@ -7,6 +7,7 @@ public class Chunk {
     private static short chunkSizeX = 16;
     private static short chunkSizeY = 128;
     private static short chunkSizeZ = 16;
+    private static int renderDistance = Crafter.getRenderDistance();
 
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
@@ -44,13 +45,43 @@ public class Chunk {
         }
     }
 
-    public short getBlock(int x,int y,int z){
-        //TODO: attempt to return neighboring block if out of bounds of x or z
-        if( x < 0 || x >= chunkSizeX || y < 0 || y >= chunkSizeY || z < 0 || z >= chunkSizeZ){
+    //this is full of magic numbers TODO: turn this into functions in ChunkMath
+    //+ render distance is getting it to base count 0
+    public static short getBlock(int x,int y,int z, int chunkX, int chunkZ){
+        chunkX += renderDistance;
+        chunkZ += renderDistance;
+        //neighbor checking
+        if(x < 0) {
+            if (chunkX - 1 >= 0) {
+                return ChunkData.getBlock(x+16,y,z,chunkX-1,chunkZ);
+            }
             return 0;
-        } else {
-            int hashy = ChunkMath.genHash(x, y, z);
-            return block[hashy];
+        } else if (x >= chunkSizeX) {
+            if ( chunkX + 1 <= renderDistance*2){
+                return ChunkData.getBlock(x-16,y,z,chunkX+1,chunkZ);
+            }
+            return 0;
+
+        } else if (y < 0 || y >= chunkSizeY) { //Y is caught regardless in the else clause if in bounds
+            return 0;
+
+        } else if (z < 0) {
+            if (chunkZ - 1 >= 0) {
+                return ChunkData.getBlock(x,y,z+16,chunkX,chunkZ-1);
+            }
+            return 0;
+
+        } else if (z >= chunkSizeZ) {
+            if (chunkZ + 1 <= renderDistance*2){
+                return ChunkData.getBlock(x,y,z-16,chunkX,chunkZ+1);
+            }
+            return 0;
+
+        }
+        //self chunk checking
+         else {
+            short blocky = ChunkData.getBlock(x,y,z,chunkX,chunkZ);
+            return blocky;
         }
     }
 
