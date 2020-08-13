@@ -1,24 +1,21 @@
 import com.jme3.app.SimpleApplication;
-import com.jme3.asset.AssetEventListener;
-import com.jme3.asset.AssetKey;
-import com.jme3.asset.AssetManager;
-import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.AnalogListener;
 import com.jme3.math.FastMath;
-import com.jme3.scene.Geometry;
+import com.jme3.math.Quaternion;
+import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
+import com.jme3.scene.CameraNode;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
-import com.jme3.texture.Texture;
-import com.jogamp.openal.sound3d.Buffer;
-import org.lwjgl.opengl.Display;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.Random;
 
 public class Crafter extends SimpleApplication {
     public static void main(String[] args) throws IOException {
@@ -52,16 +49,22 @@ public class Crafter extends SimpleApplication {
         app.start();
     }
 
+    private void initKeys() {
+        Inputs.initializeKeys(inputManager,actionListener,analogListener);
+    }
 
     @Override
     public void simpleInitApp() {
-
-        flyCam.setMoveSpeed(10);
+        initKeys();
+        flyCam.setEnabled(true);
+        flyCam.setMoveSpeed(0);
 
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
 
         cam.setFrustumPerspective(72,d.height/d.width, 0.01f, 1000f );
+
+        cam.setLocation(new Vector3f(0,128,128));
 
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
@@ -85,8 +88,12 @@ public class Crafter extends SimpleApplication {
         return renderDistance;
     }
 
+
+
     @Override
     public void simpleUpdate(float tpf){
+
+        GameCamera.handleCamera(cam);
 
         //this is for warming up vm then gen 1 chunk
 //        if (counter > 5 && !genned) {
@@ -139,6 +146,20 @@ public class Crafter extends SimpleApplication {
 //        }
 
     }
+
+
+    private final ActionListener actionListener = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean keyPressed, float tpf) {
+        }
+    };
+
+    private final AnalogListener analogListener = new AnalogListener() {
+        @Override
+        public void onAnalog(String name, float value, float tpf) {
+            GameCamera.handleKeys(cam, tpf, name, value);
+        }
+    };
 
 
 }
