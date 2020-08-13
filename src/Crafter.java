@@ -55,7 +55,7 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        flyCam.setMoveSpeed(10);
+        flyCam.setMoveSpeed(100);
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 

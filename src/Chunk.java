@@ -45,8 +45,10 @@ public class Chunk {
         }
     }
 
-    FastNoise noisey = new FastNoise();
+    private FastNoise noisey = new FastNoise();
 
+    private int heightAdder = 40;
+    private byte dirtHeight = 4;
     //a basic biome test for terrain generation
     public void genBiome(int chunkX, int chunkZ){
 
@@ -55,30 +57,36 @@ public class Chunk {
         int z = 0;
 
         FastNoise noise = new FastNoise();
-        byte height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127);
+
+        byte height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
 
         //System.out.println(height);
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
             //block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomInt(0,5));
 
-            //byte height = (byte)(FastMath.abs(noisey.GetPerlin((float)(x+chunkX),(float)(z+chunkZ))) * 127);
 
-
-            if (y <= height) {
-                block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomInt(1,5));
-            } else {
-                block[ChunkMath.genHash(x, y, z)] = 0;
+//            if (y <= height) {
+//                block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomInt(1,5));
+//            } else {
+//                block[ChunkMath.genHash(x, y, z)] = 0;
+//            }
+            if (y == height) {
+                block[ChunkMath.genHash(x, y, z)] = 5;
+            } else if (y < height && y >= height - dirtHeight){
+                block[ChunkMath.genHash(x, y, z)] = 1;
+            } else if (y < height - dirtHeight){
+                block[ChunkMath.genHash(x, y, z)] = 2;
             }
 
             y++;
             if( y > chunkSizeY - 1){
                 y = 0;
                 x++;
-                height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127);
+                height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
 
                 if( x > chunkSizeX - 1 ){
                     x = 0;
-                    height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127);
+                    height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
                     z++;
                 }
             }
@@ -120,8 +128,7 @@ public class Chunk {
         }
         //self chunk checking
          else {
-            short blocky = ChunkData.getBlock(x,y,z,chunkX,chunkZ);
-            return blocky;
+            return ChunkData.getBlock(x,y,z,chunkX,chunkZ);
         }
     }
 
