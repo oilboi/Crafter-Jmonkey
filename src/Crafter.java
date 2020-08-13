@@ -94,6 +94,7 @@ public class Crafter extends SimpleApplication {
     public void simpleUpdate(float tpf){
 
         GameCamera.handleCamera(cam);
+        Player.playerOnTick(cam);
 
         //this is for warming up vm then gen 1 chunk
 //        if (counter > 5 && !genned) {
@@ -157,7 +158,7 @@ public class Crafter extends SimpleApplication {
     private final AnalogListener analogListener = new AnalogListener() {
         @Override
         public void onAnalog(String name, float value, float tpf) {
-            GameCamera.handleKeys(cam, tpf, name, value);
+            Inputs.handleKeys(cam, tpf, name, value);
         }
     };
 
