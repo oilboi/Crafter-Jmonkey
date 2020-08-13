@@ -23,6 +23,7 @@ public class Inputs {
         inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space");
     }
 
+    private static int maxSpeed = 5;
     public static void handleKeys(Camera cam, float tpf, String name, float value ){
         float dir = 0;
         int run2D = 1;
@@ -47,17 +48,26 @@ public class Inputs {
         switch (run2D) {
             case 1:
                 //Vector3f pos = cam.getLocation();
-                Vector3f pos = Player.getPos();
+                //Vector3f pos = Player.getPos();
+                Vector3f inertia = Player.getInertia();
+
                 float[] rot = new float[3];
                 cam.getRotation().normalizeLocal().toAngles(rot);
 
                 float x = FastMath.sin(rot[1] + dir);
                 float z = FastMath.cos(-rot[1] - dir);
-                pos.x += x * 20 * tpf;
-                pos.z += z * 20 * tpf;
+                inertia.x += x * 100 * tpf;
+                inertia.z += z * 100 * tpf;
 
                 //cam.setLocation(pos);
-                Player.setPos(pos);
+                //Player.setPos(pos);
+                if(FastMath.abs(inertia.x) < maxSpeed && FastMath.abs(inertia.z) < maxSpeed) {
+                    Player.setInertia(inertia);
+                } else {
+                    Vector3f normalInert = inertia.normalize().mult(maxSpeed);
+                    Player.setInertia(new Vector3f(normalInert.x,Player.getInertia().y, normalInert.z));
+                }
+
                 break;
             case 0:
                 int move = 0;
@@ -75,9 +85,11 @@ public class Inputs {
                 }
 
                 //Vector3f pos2 = cam.getLocation();
-                Vector3f pos2 = Player.getPos();
-                pos2.y += move * 20 * tpf;
-                Player.setPos(pos2);
+                //Vector3f pos2 = Player.getPos();
+                Vector3f inertia2 = Player.getInertia();
+                inertia2.y += move * 100 * tpf;
+                //Player.setPos(pos2);
+                Player.setInertia(inertia2);
                 break;
         }
     }

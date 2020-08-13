@@ -94,7 +94,7 @@ public class Crafter extends SimpleApplication {
     public void simpleUpdate(float tpf){
 
         GameCamera.handleCamera(cam);
-        Player.playerOnTick(cam);
+        Player.playerOnTick(tpf);
 
         //this is for warming up vm then gen 1 chunk
 //        if (counter > 5 && !genned) {
