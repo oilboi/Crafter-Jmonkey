@@ -12,8 +12,11 @@ public class Inputs {
         inputManager.addMapping("a", new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("s", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("d", new KeyTrigger(KeyInput.KEY_D));
+        inputManager.addMapping("shift", new KeyTrigger(KeyInput.KEY_LSHIFT));
+        inputManager.addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
+
         // Add the names to the action listener.
         //inputManager.addListener(actionListener, "Pause");
-        inputManager.addListener(analogListener, "w", "a", "s", "d");
+        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space");
     }
 }
