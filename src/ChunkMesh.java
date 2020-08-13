@@ -30,10 +30,7 @@ public class ChunkMesh extends Mesh{
 
         if (rootNode.getChild(chunkX+" "+chunkZ) != null){
             rootNode.detachChildNamed(chunkX+" "+chunkZ);
-
-            System.out.println("node " + chunkX + " " + chunkZ + " is detached");
-        }  else {
-            //System.out.println(chunkX + " " + chunkZ + " doesn't exist :D");
+            //System.out.println("node " + chunkX + " " + chunkZ + " is detached");
         }
 
 //        long startTime = System.currentTimeMillis();

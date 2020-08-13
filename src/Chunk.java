@@ -18,8 +18,8 @@ public class Chunk {
 //        } else {
 //        genDebug();
 //        }
-        genDebug();
-//        genRandom();
+//        genDebug();
+        genRandom();
     }
 
     public short[] getBlocks(){
