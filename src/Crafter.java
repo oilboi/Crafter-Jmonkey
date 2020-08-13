@@ -75,7 +75,7 @@ public class Crafter extends SimpleApplication {
         Loader textureLoader = new Loader(assetManager);
     }
 
-    private static int renderDistance = 6;
+    private static int renderDistance = 1;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -97,47 +97,46 @@ public class Crafter extends SimpleApplication {
         Player.playerOnTick(tpf);
 
         //this is for warming up vm then gen 1 chunk
-//        if (counter > 5 && !genned) {
-//            long startTime = System.currentTimeMillis();
-//            Chunk chunk = new Chunk();
-//            ChunkData.storeChunk(x,z, chunk);
-//
-//            Geometry geo = ChunkMesh.genChunkMesh(chunk, assetManager, x, z);
-//            rootNode.attachChild(geo);
-//            genned = true;
-//            long endTime = System.currentTimeMillis();
-//            double timeElapsed = (double)(endTime - startTime)/1000;
-//            System.out.println("Chunk init time: " + timeElapsed + " seconds");
-//        } else if (!genned){
-//            System.out.println(counter);
-//            counter++;
-//        }
-
-        //this is for dynamic chunk generation
-        counter++;
-        if (counter > 5 && z <= renderDistance) {
-//            long startTime = System.currentTimeMillis();
-
+        if (counter > 5 && !genned) {
+            long startTime = System.currentTimeMillis();
             chunk = new Chunk(x,z);
             ChunkData.storeChunk(x,z, chunk);
             ChunkMesh.genChunkMesh(chunk, assetManager, x, z, rootNode,false);
+
+            genned = true;
+            long endTime = System.currentTimeMillis();
+            double timeElapsed = (double)(endTime - startTime)/1000;
+            System.out.println("Chunk init time: " + timeElapsed + " seconds");
+        } else if (!genned){
+            System.out.println(counter);
+            counter++;
+        }
+
+        //this is for dynamic chunk generation
+//        counter++;
+//        if (counter > 5 && z <= renderDistance) {
+//            long startTime = System.currentTimeMillis();
+//
+//            chunk = new Chunk(x,z);
+//            ChunkData.storeChunk(x,z, chunk);
+//            ChunkMesh.genChunkMesh(chunk, assetManager, x, z, rootNode,false);
 
 //            long endTime = System.currentTimeMillis();
 //            double timeElapsed = (double) (endTime - startTime) / 1000;
 //            System.out.println("Chunk init time: " + timeElapsed + " seconds");
 
-            //ChunkMesh.updateNeighbors(chunk, assetManager, x, z, rootNode);
-
-            //rootNode.detachChildNamed()
-
-            counter = 0;
-
-            x++;
-            if (x > renderDistance) {
-                x = -renderDistance;
-                z++;
-            }
-        }
+//            //ChunkMesh.updateNeighbors(chunk, assetManager, x, z, rootNode);
+//
+//            //rootNode.detachChildNamed()
+//
+//            counter = 0;
+//
+//            x++;
+//            if (x > renderDistance) {
+//                x = -renderDistance;
+//                z++;
+//            }
+//        }
 //        } else if(z == renderDistance){
 //            x  = z = -renderDistance;
 //
