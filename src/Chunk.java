@@ -12,14 +12,15 @@ public class Chunk {
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
-    public Chunk(){
+    public Chunk(int chunkX,int chunkZ){
 //        if (Math.random() > 0.5) {
 //            genRandom(); //this is for performance testing and uses A LOT of memory
 //        } else {
 //        genDebug();
 //        }
 //        genDebug();
-        genRandom();
+//        genRandom();
+        genBiome(chunkX,chunkZ);
     }
     public short[] getBlocks(){
         return block;
@@ -38,6 +39,46 @@ public class Chunk {
                 x++;
                 if( x > chunkSizeX - 1 ){
                     x = 0;
+                    z++;
+                }
+            }
+        }
+    }
+
+    FastNoise noisey = new FastNoise();
+
+    //a basic biome test for terrain generation
+    public void genBiome(int chunkX, int chunkZ){
+
+        int x = 0;
+        int y = 0;
+        int z = 0;
+
+        FastNoise noise = new FastNoise();
+        byte height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127);
+
+        //System.out.println(height);
+        for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
+            //block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomInt(0,5));
+
+            //byte height = (byte)(FastMath.abs(noisey.GetPerlin((float)(x+chunkX),(float)(z+chunkZ))) * 127);
+
+
+            if (y <= height) {
+                block[ChunkMath.genHash(x, y, z)] = (short)(FastMath.nextRandomInt(1,5));
+            } else {
+                block[ChunkMath.genHash(x, y, z)] = 0;
+            }
+
+            y++;
+            if( y > chunkSizeY - 1){
+                y = 0;
+                x++;
+                height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127);
+
+                if( x > chunkSizeX - 1 ){
+                    x = 0;
+                    height = (byte)(FastMath.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127);
                     z++;
                 }
             }

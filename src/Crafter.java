@@ -55,7 +55,7 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleInitApp() {
 
-        flyCam.setMoveSpeed(100);
+        flyCam.setMoveSpeed(10);
 
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 
@@ -65,7 +65,7 @@ public class Crafter extends SimpleApplication {
         Loader textureLoader = new Loader(assetManager);
     }
 
-    private static int renderDistance = 20;
+    private static int renderDistance = 1;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -103,7 +103,7 @@ public class Crafter extends SimpleApplication {
         if (counter > 5 && z <= renderDistance) {
 //            long startTime = System.currentTimeMillis();
 
-            chunk = new Chunk();
+            chunk = new Chunk(x,z);
             ChunkData.storeChunk(x,z, chunk);
             ChunkMesh.genChunkMesh(chunk, assetManager, x, z, rootNode,false);
 
