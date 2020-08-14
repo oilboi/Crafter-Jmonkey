@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class Player {
     private static int renderDistance = Crafter.getRenderDistance();
-    private static Vector3f pos = new Vector3f(0,120,0);
+    private static Vector3f pos = new Vector3f(0,200,0);
     private static float eyeHeight = 1.5f;
     private static Vector3f inertia = new Vector3f(0,0,0);
     private static float height = 1.9f;
@@ -36,7 +36,7 @@ public class Player {
     }
 
     public static void playerOnTick(float tpf){
-        inertia.y -= 200 * tpf;
+        inertia.y -= 55 * tpf;
         applyInertia(tpf);
 
         int[] current = new int[2];
@@ -63,16 +63,12 @@ public class Player {
         setPos(currentPos);
         Vector3f inertia3 = Player.getInertia();
         inertia3.x += -inertia3.x * tpf * 10;
-        inertia3.y += -inertia3.y * tpf * 10;
+        //inertia3.y += -inertia3.y * tpf * 10;
         inertia3.z += -inertia3.z * tpf * 10;
         Player.setInertia(inertia3);
     }
 
     private static void collisionDetect(){
-
-
-
-
         onGround = false;
         //detect ground collision
         if (detectBlock(width, 0, width) || detectBlock(width,0, -width) || detectBlock(-width,0,width) || detectBlock(-width,0,-width)) {
