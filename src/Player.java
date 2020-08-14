@@ -88,15 +88,34 @@ public class Player {
     }
 
     private static void collisionDetect(float tpf, Vector3f newPos){
+        onGround = false;
+        
+        //floor detection
+        if (detectBlock(0, 0, 0)) {
+            Vector3f temp = pos.clone();
+            temp.x = FastMath.floor(temp.x);
+            temp.y = FastMath.floor(temp.y);
+            temp.z = FastMath.floor(temp.z);
+            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
+            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
 
+            if (blockBelow.getTop() >= us.getBottom()) {
+                pos.y = blockBelow.getTop() + 0.001f;
+                inertia.y = 0;
+                onGround = true;
+            }
+        }
 
         //x- detection
         if (detectBlock(-width, 0.1f, 0)) {
             Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x - width);
+
+            temp.x = FastMath.floor(temp.x) - 1;
             temp.y = FastMath.floor(temp.y + 0.1f);
             temp.z = FastMath.floor(temp.z);
+
             CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
+
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
 
             if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()){
@@ -110,9 +129,10 @@ public class Player {
         //x+ detection
         if (detectBlock(width, 0.1f, 0)) {
             Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x+width);
+            temp.x = FastMath.floor(temp.x) + 1;
             temp.y = FastMath.floor(temp.y+0.1f);
             temp.z = FastMath.floor(temp.z);
+
             CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
             if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()) {
@@ -125,12 +145,13 @@ public class Player {
 
 
 
+
         //z- detection
         if (detectBlock(0, 0.1f, -width)) {
             Vector3f temp = pos.clone();
             temp.x = FastMath.floor(temp.x);
             temp.y = FastMath.floor(temp.y + 0.1f);
-            temp.z = FastMath.floor(temp.z - width);
+            temp.z = FastMath.floor(temp.z) - 1;
             CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
 
@@ -147,7 +168,7 @@ public class Player {
             Vector3f temp = pos.clone();
             temp.x = FastMath.floor(temp.x);
             temp.y = FastMath.floor(temp.y+0.1f);
-            temp.z = FastMath.floor(temp.z+width);
+            temp.z = FastMath.floor(temp.z) + 1;
             CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
             if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()) {
@@ -155,25 +176,6 @@ public class Player {
                     pos.z = blockBelow.getFront() - width - 0.001f;
                     inertia.z = 0;
                 }
-            }
-        }
-
-
-        onGround = false;
-
-        //floor detection
-        if (detectBlock(0, 0, 0)) {
-            Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x);
-            temp.y = FastMath.floor(temp.y);
-            temp.z = FastMath.floor(temp.z);
-            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-
-            if (blockBelow.getTop() >= us.getBottom()) {
-                pos.y = blockBelow.getTop() + 0.001f;
-                inertia.y = 0;
-                onGround = true;
             }
         }
     }
