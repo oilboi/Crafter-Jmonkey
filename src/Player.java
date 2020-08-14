@@ -61,9 +61,14 @@ public class Player {
         current[0] = (int)(FastMath.floor(flooredPos.x / 16f));
         current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
         currentChunk = current;
+        //returns player back to origin point
         if(pos.y < 0){
             pos = new Vector3f(0,100,0);
         }
+        //this is for debugging
+//        if(pos.y < -3){
+//            inertia.y = 0;
+//        }
     }
 
     private static void applyInertia(float tpf){

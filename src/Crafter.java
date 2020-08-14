@@ -79,7 +79,7 @@ public class Crafter extends SimpleApplication {
 
     }
 
-    private static int renderDistance = 3;
+    private static int renderDistance = 5;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -97,9 +97,10 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf){
 
+        GameCamera.handleCamera(cam);
+
         if (genned) {
             Player.playerOnTick(tpf);
-            GameCamera.handleCamera(cam);
         }
 
         //this is for warming up vm then gen 1 chunk
