@@ -30,7 +30,7 @@ public class ChunkData {
     public static short getBlock(int x, int y, int z, int chunkX, int chunkZ){
         //System.out.println(x + " " + y + " " + z + " " + chunkX + " " + chunkZ);
         //System.out.println(Arrays.deepToString(chunkArray));
-        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2){
+        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 || y < 0 || y >= 128){
             return 0;
         }
 
