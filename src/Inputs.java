@@ -41,15 +41,13 @@ public class Inputs {
                 dir = FastMath.HALF_PI + FastMath.PI;
                 break;
             default:
-                //run2D = 0;
-                return;
+                run2D = 0;
+                break;
         }
 
 
-//        switch (run2D) {
-//            case 1:
-                //Vector3f pos = cam.getLocation();
-                //Vector3f pos = Player.getPos();
+        switch (run2D) {
+            case 1:
                 Vector3f inertia = Player.getInertia();
 
                 float[] rot = new float[3];
@@ -60,8 +58,6 @@ public class Inputs {
                 inertia.x += x * 100 * tpf;
                 inertia.z += z * 100 * tpf;
 
-                //cam.setLocation(pos);
-                //Player.setPos(pos);
                 if(FastMath.abs(inertia.x) < maxSpeed && FastMath.abs(inertia.z) < maxSpeed) {
                     Player.setInertia(inertia);
                 } else {
@@ -69,30 +65,28 @@ public class Inputs {
                     Player.setInertia(new Vector3f(normalInert.x,Player.getInertia().y, normalInert.z));
                 }
 
-//                break;
-//            case 0:
-//                int move = 0;
-//                switch (name){
-//                    case "space":
-//                        move = 1;
-//                        break;
-//                    case "shift":
-//                        move = -1;
-//                        break;
-//                }
-//
-//                if(move==0){
-//                    return;
-//                }
-//
-//                //Vector3f pos2 = cam.getLocation();
-//                //Vector3f pos2 = Player.getPos();
-//                Vector3f inertia2 = Player.getInertia();
-//                inertia2.y += move * 100 * tpf;
-//                //Player.setPos(pos2);
-//                Player.setInertia(inertia2);
-//                break;
-//        }
+                break;
+            case 0:
+                int move = 0;
+                switch (name){
+                    case "space":
+                        move = 1;
+                        break;
+                    //case "shift":
+                    //    move = -1;
+                    //    break;
+                }
+
+                if(move==0){
+                    return;
+                }
+
+                if(Player.isOnGround()) {
+                    System.out.println("trying to jump");
+                    Player.setJumpBuffer();
+                }
+                break;
+        }
 
     }
 }

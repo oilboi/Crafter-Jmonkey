@@ -73,6 +73,10 @@ public class Crafter extends SimpleApplication {
 
         //used statically. Object initialized here for loading textures
         Loader textureLoader = new Loader(assetManager);
+
+
+
+
     }
 
     private static int renderDistance = 3;
@@ -115,8 +119,8 @@ public class Crafter extends SimpleApplication {
 //        }
 
         //this is for dynamic chunk generation
-        counter++;
-        if (counter > 5 && z <= renderDistance) {
+        //counter++;
+        if (z <= renderDistance) {
             long startTime = System.currentTimeMillis();
 
             chunk = new Chunk(x,z);
@@ -127,11 +131,6 @@ public class Crafter extends SimpleApplication {
             double timeElapsed = (double) (endTime - startTime) / 1000;
             System.out.println("Chunk init time: " + timeElapsed + " seconds");
 
-            //ChunkMesh.updateNeighbors(chunk, assetManager, x, z, rootNode);
-
-            //rootNode.detachChildNamed()
-
-            counter = 0;
 
             x++;
             if (x > renderDistance) {
