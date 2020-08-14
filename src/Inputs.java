@@ -42,7 +42,7 @@ public class Inputs {
                 break;
             default:
                 //run2D = 0;
-                break;
+                return;
         }
 
 

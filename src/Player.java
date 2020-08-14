@@ -1,12 +1,13 @@
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jogamp.opengl.math.geom.AABBox;
 
 import java.util.Arrays;
 
 public class Player {
     private static int renderDistance = Crafter.getRenderDistance();
-    private static Vector3f pos = new Vector3f(0,60,0);
+    private static Vector3f pos = new Vector3f(0,120,0);
     private static float eyeHeight = 1.5f;
     private static Vector3f inertia = new Vector3f(0,0,0);
     private static float height = 1.9f;
@@ -68,8 +69,11 @@ public class Player {
     }
 
     private static void collisionDetect(){
-        onGround = false;
 
+
+
+
+        onGround = false;
         //detect ground collision
         if (detectBlock(width, 0, width) || detectBlock(width,0, -width) || detectBlock(-width,0,width) || detectBlock(-width,0,-width)) {
             while (!(!detectBlock(width, 0, width) && !detectBlock(width, 0, -width) && !detectBlock(-width, 0, width) && !detectBlock(-width, 0, -width))) {
