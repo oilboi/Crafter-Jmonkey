@@ -115,6 +115,7 @@ public class Crafter extends SimpleApplication {
         guiNode.detachChildNamed("pos");
         playerPosText.setText("X: " + Player.getPos().x + "\nY: " + Player.getPos().y + "\nZ:" + Player.getPos().z);
         playerPosText.setLocalTranslation(10, cam.getHeight(), 0);
+        playerPosText.setSize(24f);
         guiNode.attachChild(playerPosText);
         //this is for warming up vm then gen 1 chunk
 //        if (counter > 5 && !genned) {
