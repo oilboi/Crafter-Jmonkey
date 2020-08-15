@@ -54,10 +54,10 @@ public class Player {
             inertia.y = 70f;
         }
 
-        System.out.println(inertia.y);
+//        System.out.println(inertia.y);
 
         if(jumpBuffer){
-            inertia.y += 10f;//12f;
+            inertia.y += 12f;
             jumpBuffer = false;
         }
 
