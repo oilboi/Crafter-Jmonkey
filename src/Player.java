@@ -209,7 +209,7 @@ public class Player {
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
-        if (yWithin && zWithin && xWithin) {
+        //if (yWithin && zWithin && xWithin) {
             System.out.println("-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-");
             System.out.println(block.getBasePos());
             System.out.println(block.getTop());
@@ -220,7 +220,7 @@ public class Player {
                 inertia.y = 0;
                 onGround = true;
             }
-        }
+        //}
     }
 
 
