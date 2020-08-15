@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class Player {
     private static int renderDistance = Crafter.getRenderDistance();
-    private static Vector3f pos = new Vector3f(0,52,0);
+    private static Vector3f pos = new Vector3f(0,22,0);
 
     private static float eyeHeight = 1.5f;
 
@@ -72,7 +72,7 @@ public class Player {
     }
 
     private static void applyInertia(float tpf){
-        Vector3f newPos = pos;
+        Vector3f newPos = pos.clone();
         newPos.x += inertia.x * tpf;
         newPos.y += inertia.y * tpf;
         newPos.z += inertia.z * tpf;
@@ -80,6 +80,8 @@ public class Player {
         //System.out.println(inertia.y);
 
         collisionDetect(tpf, newPos);
+
+        pos = newPos;
 
         Vector3f inertia3 = Player.getInertia();
         inertia3.x += -inertia3.x * tpf * 10;
@@ -96,17 +98,25 @@ public class Player {
         fPos.y = FastMath.floor(fPos.y);
         fPos.z = FastMath.floor(fPos.z);
 
+        CustomBlockBox[] virtualBlock = new CustomBlockBox[3*3*4];
+        int index = 0;
+        //collect all blocks within collision index
         //todo: turn this into 1D indexing
         for (int x = -1; x <= 1; x++){
             for (int z = -1; z <= 1; z++){
                 for (int y = -1; y <= 2; y++){
                     if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
-                        CustomBlockBox block = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
-                        CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-                        collide(us, block);
+                        virtualBlock[index] = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
+                        index++;
                     }
                 }
             }
+        }
+        //run through collisions
+        for(int i = 0; i < index; i++){
+            //virtualBlock[i]; //this is the block object
+            CustomAABB us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
+            collide(us, virtualBlock[i], newPos);
         }
 
         //floor detection
@@ -189,20 +199,24 @@ public class Player {
             }
         }
         */
+
     }
 
     //this is where actual collision events occur!
-    public static void collide(CustomAABB us, CustomBlockBox block){
+    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f newPos){
 
         boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
         if (yWithin && zWithin && xWithin) {
+            System.out.println("-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-");
             System.out.println(block.getBasePos());
+            System.out.println(block.getTop());
+            System.out.println(us.getBottom());
             //floor detection
             if (block.getTop() > us.getBottom()){
-                pos.y = block.getTop() + 0.001f;
+                newPos.y = block.getTop() + 0.001f;
                 inertia.y = 0;
                 onGround = true;
             }
