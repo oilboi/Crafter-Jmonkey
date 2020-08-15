@@ -89,23 +89,34 @@ public class Player {
 
     private static void collisionDetect(float tpf, Vector3f newPos){
         onGround = false;
-        
-        //floor detection
-        if (detectBlock(0, 0, 0)) {
-            Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x);
-            temp.y = FastMath.floor(temp.y);
-            temp.z = FastMath.floor(temp.z);
-            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
 
-            if (blockBelow.getTop() >= us.getBottom()) {
-                pos.y = blockBelow.getTop() + 0.001f;
-                inertia.y = 0;
-                onGround = true;
+        //get the real positions of the blocks
+        Vector3f fPos = pos.clone();
+        fPos.x = FastMath.floor(fPos.x);
+        fPos.y = FastMath.floor(fPos.y);
+        fPos.z = FastMath.floor(fPos.z);
+
+        //todo: turn this into 1D indexing
+        for (int x = -1; x <= 1; x++){
+            for (int z = -1; z <= 1; z++){
+                for (int y = -1; y <= 2; y++){
+                    if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
+                        CustomBlockBox block = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
+                        CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
+                        collide(us, block);
+                    }
+                }
             }
         }
 
+        //floor detection
+//        if (detectBlock(fPos)) {
+//            CustomBlockBox blockBelow = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
+//            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
+//            collide(us,blockBelow);
+//        }
+
+        /*
         //x- detection
         if (detectBlock(-width, 0.1f, 0)) {
             Vector3f temp = pos.clone();
@@ -143,16 +154,15 @@ public class Player {
             }
         }
 
-
-
-
         //z- detection
         if (detectBlock(0, 0.1f, -width)) {
             Vector3f temp = pos.clone();
             temp.x = FastMath.floor(temp.x);
             temp.y = FastMath.floor(temp.y + 0.1f);
             temp.z = FastMath.floor(temp.z) - 1;
+
             CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
+
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
 
             if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()){
@@ -178,17 +188,32 @@ public class Player {
                 }
             }
         }
+        */
+    }
+
+    //this is where actual collision events occur!
+    public static void collide(CustomAABB us, CustomBlockBox block){
+
+        boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
+        boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
+        boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
+
+        if (yWithin && zWithin && xWithin) {
+            //System.out.println(block.getBasePos());
+            //floor detection
+            if (block.getTop() > us.getBottom()){
+                pos.y = block.getTop() + 0.001f;
+                inertia.y = 0;
+                onGround = true;
+            }
+        }
     }
 
 
 
-    private static boolean detectBlock(float x, float y, float z){
-        Vector3f flooredPos = pos.clone();
-        flooredPos.x = FastMath.floor(flooredPos.x + x);
-        flooredPos.y = FastMath.floor(flooredPos.y + y);
-        flooredPos.z = FastMath.floor(flooredPos.z + z);
-
+    private static boolean detectBlock(Vector3f flooredPos){
         int[] current = new int[2];
+
         current[0] = (int)(FastMath.floor(flooredPos.x / 16f));
         current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
 

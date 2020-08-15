@@ -1,7 +1,11 @@
+import com.jme3.math.Vector3f;
+
 public class CustomBlockBox {
     private float[] aabb;
+    private Vector3f basePos;
     public CustomBlockBox(int x, int y, int z){
         aabb = new float[]{(float)x, (float)y, (float)z, x+1f, y+1f, z+1f};
+        basePos = new Vector3f((float)x,(float)y,(float)z);
     }
     //getters
     public float getLeft(){
@@ -25,5 +29,9 @@ public class CustomBlockBox {
     //the easy way
     public float[] getAsArray(){
         return aabb;
+    }
+    //base pos
+    public Vector3f getBasePos(){
+        return basePos;
     }
 }

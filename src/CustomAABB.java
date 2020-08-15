@@ -2,6 +2,7 @@ public class CustomAABB {
     private float[] aabb;
     public CustomAABB(float x, float y, float z, float width, float height){
         aabb = new float[]{x-width, y, z-width, x+width, y+height, z+width};
+        //                    0     1     2        3        4         5
     }
     //getters
     public float getLeft(){

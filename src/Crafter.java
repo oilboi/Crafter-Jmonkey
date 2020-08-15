@@ -1,5 +1,6 @@
 import com.jme3.app.SimpleApplication;
 import com.jme3.asset.plugins.FileLocator;
+import com.jme3.font.BitmapText;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.math.FastMath;
@@ -10,6 +11,7 @@ import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.system.AppSettings;
+import com.jogamp.newt.Window;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,6 +20,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class Crafter extends SimpleApplication {
+
+
     public static void main(String[] args) throws IOException {
         //self app creation
         Crafter app = new Crafter();
@@ -53,6 +57,8 @@ public class Crafter extends SimpleApplication {
         Inputs.initializeKeys(inputManager,actionListener,analogListener);
     }
 
+    private BitmapText playerPosText;
+
     @Override
     public void simpleInitApp() {
         initKeys();
@@ -74,12 +80,14 @@ public class Crafter extends SimpleApplication {
         //used statically. Object initialized here for loading textures
         Loader textureLoader = new Loader(assetManager);
 
+        guiFont = assetManager.loadFont("pixel.fnt");
 
-
-
+        playerPosText = new BitmapText(guiFont, false);
+        playerPosText.setSize(guiFont.getCharSet().getRenderedSize());
+        playerPosText.setName("pos");
     }
 
-    private static int renderDistance = 5;
+    private static int renderDistance = 2;
 
     private int x = -renderDistance;
     private int z = -renderDistance;
@@ -103,6 +111,11 @@ public class Crafter extends SimpleApplication {
             Player.playerOnTick(tpf);
         }
 
+        //System.out.println(cam.getHeight());
+        guiNode.detachChildNamed("pos");
+        playerPosText.setText("X: " + Player.getPos().x + "\nY: " + Player.getPos().y + "\nZ:" + Player.getPos().z);
+        playerPosText.setLocalTranslation(10, cam.getHeight(), 0);
+        guiNode.attachChild(playerPosText);
         //this is for warming up vm then gen 1 chunk
 //        if (counter > 5 && !genned) {
 //            long startTime = System.currentTimeMillis();
