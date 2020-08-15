@@ -1,13 +1,14 @@
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Node;
 import com.jogamp.opengl.math.geom.AABBox;
 
 import java.util.Arrays;
 
 public class Player {
     private static int renderDistance = Crafter.getRenderDistance();
-    private static Vector3f pos = new Vector3f(0,22,0);
+    private static Vector3f pos = new Vector3f(0,55,0);
 
     private static float eyeHeight = 1.5f;
 
@@ -44,7 +45,7 @@ public class Player {
         Player.inertia = inertia;
     }
 
-    public static void playerOnTick(float tpf){
+    public static void playerOnTick(float tpf, Node rootNode){
         inertia.y -= 50 * tpf;
 
         if(jumpBuffer){
@@ -52,7 +53,7 @@ public class Player {
             jumpBuffer = false;
         }
 
-        applyInertia(tpf);
+        applyInertia(tpf, rootNode);
 
         int[] current = new int[2];
         Vector3f flooredPos = pos.clone();
@@ -71,7 +72,7 @@ public class Player {
 //        }
     }
 
-    private static void applyInertia(float tpf){
+    private static void applyInertia(float tpf, Node rootNode){
         Vector3f newPos = pos.clone();
         newPos.x += inertia.x * tpf;
         newPos.y += inertia.y * tpf;
@@ -79,7 +80,7 @@ public class Player {
 
         //System.out.println(inertia.y);
 
-        collisionDetect(tpf, newPos);
+        collisionDetect(tpf, newPos, rootNode);
 
         pos = newPos;
 
@@ -89,7 +90,7 @@ public class Player {
         Player.setInertia(inertia3);
     }
 
-    private static void collisionDetect(float tpf, Vector3f newPos){
+    private static void collisionDetect(float tpf, Vector3f newPos, Node rootNode){
         onGround = false;
 
         //get the real positions of the blocks
@@ -97,6 +98,8 @@ public class Player {
         fPos.x = FastMath.floor(fPos.x);
         fPos.y = FastMath.floor(fPos.y);
         fPos.z = FastMath.floor(fPos.z);
+
+        //System.out.println(new CustomBlockBox((int)fPos.x, (int)fPos.y, (int)fPos.z).getBasePos());
 
         CustomBlockBox[] virtualBlock = new CustomBlockBox[3*3*4];
         int index = 0;
@@ -106,7 +109,7 @@ public class Player {
             for (int z = -1; z <= 1; z++){
                 for (int y = -1; y <= 2; y++){
                     if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
-                        virtualBlock[index] = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
+                        virtualBlock[index] = new CustomBlockBox((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z);
                         index++;
                     }
                 }
@@ -116,9 +119,8 @@ public class Player {
         for(int i = 0; i < index; i++){
             //virtualBlock[i]; //this is the block object
             CustomAABB us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
-            collide(us, virtualBlock[i], newPos);
+            collide(us, virtualBlock[i], newPos, rootNode);
         }
-
         //floor detection
 //        if (detectBlock(fPos)) {
 //            CustomBlockBox blockBelow = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
@@ -203,27 +205,32 @@ public class Player {
     }
 
     //this is where actual collision events occur!
-    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f newPos){
+    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f newPos, Node rootNode){
 
         boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
-        //if (yWithin && zWithin && xWithin) {
-            System.out.println("-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-");
-            System.out.println(block.getBasePos());
-            System.out.println(block.getTop());
-            System.out.println(us.getBottom());
+
+        if (xWithin && zWithin && yWithin) {
+//            System.out.println("-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-");
+//            System.out.println(block.getBasePos());
+//            System.out.println(block.getTop());
+//            System.out.println(us.getBottom());
             //floor detection
             if (block.getTop() > us.getBottom()){
-                newPos.y = block.getTop() + 0.001f;
+                rootNode.getChild("collision").setLocalTranslation((block.getRight()+block.getLeft())/2f, block.getTop(),(block.getFront()+block.getBack())/2f);
+//                System.out.println("-=-=-=-=--=-=--=--==-=-=-=-=");
+//                System.out.println(us.getLeft());
+//                System.out.println(block.getRight());
+                //System.out.println(xWithin + " " + yWithin + " " + zWithin);
+                //System.out.println(xWithin + " " + zWithin);
+                newPos.y = block.getTop() + 0.00001f;
                 inertia.y = 0;
                 onGround = true;
             }
-        //}
+        }
     }
-
-
 
     private static boolean detectBlock(Vector3f flooredPos){
         int[] current = new int[2];

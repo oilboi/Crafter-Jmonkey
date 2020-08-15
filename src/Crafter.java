@@ -3,15 +3,13 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.font.BitmapText;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
+import com.jme3.material.Material;
 import com.jme3.math.FastMath;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
-import com.jme3.scene.CameraNode;
-import com.jme3.scene.Node;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Sphere;
 import com.jme3.system.AppSettings;
-import com.jogamp.newt.Window;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -58,7 +56,6 @@ public class Crafter extends SimpleApplication {
     }
 
     private BitmapText playerPosText;
-
     @Override
     public void simpleInitApp() {
         initKeys();
@@ -84,6 +81,16 @@ public class Crafter extends SimpleApplication {
         playerPosText = new BitmapText(guiFont, false);
         playerPosText.setSize(guiFont.getCharSet().getRenderedSize());
         playerPosText.setName("pos");
+
+        Sphere collisionImpactMesh = new Sphere(32, 32, 0.3f, false, false);
+        Geometry geom = new Geometry("A shape", collisionImpactMesh);
+        Material mat = new Material(assetManager,
+                "Common/MatDefs/Misc/ShowNormals.j3md");
+        geom.setMaterial(mat);
+        // if you want, transform (move, rotate, scale) the geometry.
+        geom.setLocalTranslation(0,55,0);
+        geom.setName("collision");
+        rootNode.attachChild(geom);
     }
 
     private static int renderDistance = 2;
@@ -107,7 +114,7 @@ public class Crafter extends SimpleApplication {
         GameCamera.handleCamera(cam);
 
         if (genned) {
-            Player.playerOnTick(tpf);
+            Player.playerOnTick(tpf, rootNode);
         }
 
         guiNode.detachChildNamed("pos");
