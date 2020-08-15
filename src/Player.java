@@ -46,7 +46,7 @@ public class Player {
     }
 
     public static void playerOnTick(float tpf, Node rootNode){
-        inertia.y -= 50 * tpf;
+        inertia.y -= 50 * tpf; //gravity
 
         if(jumpBuffer){
             inertia.y += 12f;
@@ -84,8 +84,9 @@ public class Player {
 
         pos = newPos;
 
+        //apply friction
         Vector3f inertia3 = Player.getInertia();
-        inertia3.x += -inertia3.x * tpf * 10;
+        inertia3.x += -inertia3.x * tpf * 10; // do (10 - 9.5f) for slippery!
         inertia3.z += -inertia3.z * tpf * 10;
         Player.setInertia(inertia3);
     }
@@ -144,6 +145,7 @@ public class Player {
                 if (newPos.y - oldPos > 1) {
                     newPos.y = (int)oldPos;
                 }
+                rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
                 inertia.y = 0;
                 onGround = true;
             }

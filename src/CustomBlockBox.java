@@ -4,7 +4,7 @@ public class CustomBlockBox {
     private float[] aabb;
     private Vector3f basePos;
     public CustomBlockBox(int x, int y, int z){
-        aabb = new float[]{(float)x, (float)y, (float)z, x+1f, y+1f, z+1};
+        aabb = new float[]{(float)x, (float)y, (float)z, x+1f, y+1f, z+1f};
         basePos = new Vector3f((float)x,(float)y,(float)z);
     }
     //getters
