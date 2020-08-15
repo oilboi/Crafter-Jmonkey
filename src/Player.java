@@ -105,12 +105,14 @@ public class Player {
         int index = 0;
         //collect all blocks within collision index
         //todo: turn this into 1D indexing
+        //System.out.println();
         for (int x = -1; x <= 1; x++){
             for (int z = -1; z <= 1; z++){
                 for (int y = -1; y <= 2; y++){
                     if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
                         virtualBlock[index] = new CustomBlockBox((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z);
                         index++;
+                        //System.out.println((fPos.x + x) + " " + (fPos.y + y) + " " + (fPos.z+z));
                     }
                 }
             }
@@ -121,87 +123,6 @@ public class Player {
             CustomAABB us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
             collide(us, virtualBlock[i], newPos, rootNode);
         }
-        //floor detection
-//        if (detectBlock(fPos)) {
-//            CustomBlockBox blockBelow = new CustomBlockBox((int) fPos.x, (int) fPos.y, (int) fPos.z);
-//            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-//            collide(us,blockBelow);
-//        }
-
-        /*
-        //x- detection
-        if (detectBlock(-width, 0.1f, 0)) {
-            Vector3f temp = pos.clone();
-
-            temp.x = FastMath.floor(temp.x) - 1;
-            temp.y = FastMath.floor(temp.y + 0.1f);
-            temp.z = FastMath.floor(temp.z);
-
-            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
-
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-
-            if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()){
-                if (blockBelow.getRight() > us.getLeft()) {
-                    pos.x = blockBelow.getRight() + width + 0.001f;
-                    inertia.x = 0;
-                }
-            }
-        }
-
-        //x+ detection
-        if (detectBlock(width, 0.1f, 0)) {
-            Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x) + 1;
-            temp.y = FastMath.floor(temp.y+0.1f);
-            temp.z = FastMath.floor(temp.z);
-
-            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-            if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()) {
-                if (blockBelow.getLeft() < us.getRight()) {
-                    pos.x = blockBelow.getLeft() - width - 0.001f;
-                    inertia.x = 0;
-                }
-            }
-        }
-
-        //z- detection
-        if (detectBlock(0, 0.1f, -width)) {
-            Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x);
-            temp.y = FastMath.floor(temp.y + 0.1f);
-            temp.z = FastMath.floor(temp.z) - 1;
-
-            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
-
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-
-            if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()){
-                if (blockBelow.getBack() > us.getFront()) {
-                    pos.z = blockBelow.getBack() + width + 0.001f;
-                    inertia.z = 0;
-                }
-            }
-        }
-
-        //z+ detection
-        if (detectBlock(0, 0.1f, width)) {
-            Vector3f temp = pos.clone();
-            temp.x = FastMath.floor(temp.x);
-            temp.y = FastMath.floor(temp.y+0.1f);
-            temp.z = FastMath.floor(temp.z) + 1;
-            CustomBlockBox blockBelow = new CustomBlockBox((int) temp.x, (int) temp.y, (int) temp.z);
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-            if (blockBelow.getTop() > us.getBottom() && blockBelow.getBottom() < us.getBottom()) {
-                if (blockBelow.getFront() < us.getBack()) {
-                    pos.z = blockBelow.getFront() - width - 0.001f;
-                    inertia.z = 0;
-                }
-            }
-        }
-        */
-
     }
 
     //this is where actual collision events occur!
@@ -211,25 +132,101 @@ public class Player {
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
+        //System.out.println(block.getLeft() + " " + block.getBottom() + " " + block.getFront());
 
         if (xWithin && zWithin && yWithin) {
-//            System.out.println("-=-=-=-=-=-=-=-=--=-=-=-=-=-=-=-=-");
-//            System.out.println(block.getBasePos());
-//            System.out.println(block.getTop());
-//            System.out.println(us.getBottom());
             //floor detection
-            if (block.getTop() > us.getBottom()){
-                rootNode.getChild("collision").setLocalTranslation((block.getRight()+block.getLeft())/2f, block.getTop(),(block.getFront()+block.getBack())/2f);
-//                System.out.println("-=-=-=-=--=-=--=--==-=-=-=-=");
-//                System.out.println(us.getLeft());
-//                System.out.println(block.getRight());
-                //System.out.println(xWithin + " " + yWithin + " " + zWithin);
-                //System.out.println(xWithin + " " + zWithin);
-                newPos.y = block.getTop() + 0.00001f;
+            if (block.getTop() > us.getBottom() && inertia.y < 0) {
+                //this is the collision debug sphere for terrain
+                float oldPos = newPos.y;
+                newPos.y = block.getTop();
+                //don't move up if too high
+                if (newPos.y - oldPos > 1) {
+                    newPos.y = (int)oldPos;
+                }
                 inertia.y = 0;
                 onGround = true;
             }
         }
+
+
+        float averageX = FastMath.abs(((block.getLeft() + block.getRight())/2f) - newPos.x);
+        float averageY = FastMath.abs(((block.getBottom() + block.getTop())/2f) - newPos.y);
+        float averageZ = FastMath.abs(((block.getFront() + block.getBack())/2f) - newPos.z);
+
+        if (averageX > averageZ) {
+            us = new CustomAABB(newPos.x, newPos.y+0.1f, newPos.z, width, height);
+            xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
+            yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
+            zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
+
+            //x- detection
+            if (xWithin && zWithin && yWithin) {
+                if (block.getRight() > us.getLeft() && inertia.x < 0) {
+                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
+                    newPos.x = block.getRight() + width + 0.00001f;
+                    inertia.x = 0;
+                }
+            }
+
+            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height);
+            xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
+            yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
+            zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+
+            //x+ detection
+            if (xWithin && zWithin && yWithin) {
+                if (block.getLeft() < us.getRight() && inertia.x > 0) {
+                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
+                    newPos.x = block.getLeft() - width - 0.00001f;
+                    inertia.x = 0;
+                }
+            }
+        } else {
+            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height);
+            xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
+            yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
+            zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+
+            //z- detection
+            if (xWithin && zWithin && yWithin) {
+                if (block.getBack() > us.getFront() && inertia.z < 0) {
+                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
+                    newPos.z = block.getBack() + width + 0.00001f;
+                    inertia.z = 0;
+                }
+            }
+
+            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height);
+            xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
+            yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
+            zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+
+            //z+ detection
+            if (xWithin && zWithin && yWithin) {
+                if (block.getFront() < us.getBack() && inertia.z > 0) {
+                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
+                    newPos.z = block.getFront() - width - 0.00001f;
+                    inertia.z = 0;
+                }
+            }
+        }
+
+
+
+//            //z- detection
+//            if (block.getBack() > us.getFront()) {
+//                pos.z = block.getBack() + width + 0.00001f;
+//                inertia.z = 0;
+//                us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
+//            }
+//
+//            //z+ detection
+//            if (block.getFront() < us.getBack()) {
+//                pos.z = block.getFront() - width - 0.00001f;
+//                inertia.z = 0;
+//                us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
+//            }
     }
 
     private static boolean detectBlock(Vector3f flooredPos){
