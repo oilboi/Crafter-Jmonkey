@@ -146,7 +146,7 @@ public class Player {
 
         if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront()))) {
             //floor detection
-            if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.01f) {
+            if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.05f) {
                 //this is the collision debug sphere for terrain
                 float oldPos = newPos.y;
                 newPos.y = block.getTop();
