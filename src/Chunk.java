@@ -20,7 +20,8 @@ public class Chunk {
 //        }
 //        genDebug();
 //        genRandom();
-        genBiome(chunkX,chunkZ);
+//        genBiome(chunkX,chunkZ);
+        genFlat();
     }
     public short[] getBlocks(){
         return block;
@@ -44,6 +45,31 @@ public class Chunk {
             }
         }
     }
+
+    //generate flat
+    public void genFlat(){
+        int x = 0;
+        int y = 0;
+        int z = 0;
+        for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
+            if (y < 20) {
+                block[ChunkMath.genHash(x, y, z)] = 1;
+            }else{
+                block[ChunkMath.genHash(x, y, z)] = 0;
+            }
+            y++;
+            if( y > chunkSizeY - 1){
+                y = 0;
+                x++;
+                if( x > chunkSizeX - 1 ){
+                    x = 0;
+                    z++;
+                }
+            }
+        }
+    }
+
+
 
     private FastNoise noisey = new FastNoise();
 

@@ -81,7 +81,6 @@ public class Crafter extends SimpleApplication {
         Loader textureLoader = new Loader(assetManager);
 
         guiFont = assetManager.loadFont("pixel.fnt");
-
         playerPosText = new BitmapText(guiFont, false);
         playerPosText.setSize(guiFont.getCharSet().getRenderedSize());
         playerPosText.setName("pos");
@@ -111,7 +110,6 @@ public class Crafter extends SimpleApplication {
             Player.playerOnTick(tpf);
         }
 
-        //System.out.println(cam.getHeight());
         guiNode.detachChildNamed("pos");
         playerPosText.setText("X: " + Player.getPos().x + "\nY: " + Player.getPos().y + "\nZ:" + Player.getPos().z);
         playerPosText.setLocalTranslation(10, cam.getHeight(), 0);

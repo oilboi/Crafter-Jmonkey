@@ -199,7 +199,7 @@ public class Player {
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
         if (yWithin && zWithin && xWithin) {
-            //System.out.println(block.getBasePos());
+            System.out.println(block.getBasePos());
             //floor detection
             if (block.getTop() > us.getBottom()){
                 pos.y = block.getTop() + 0.001f;
