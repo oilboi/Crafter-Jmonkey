@@ -1,4 +1,3 @@
-import com.jme3.app.state.RootNodeAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.material.Material;
 import com.jme3.math.*;
@@ -244,21 +243,19 @@ public class ChunkMesh extends Mesh{
         rootNode.attachChild(geo);
 
         if(!updating) {
+            //System.out.println("This should be updating");
             updateNeighbors(assetManager, chunkX, chunkZ, rootNode);
         }
     }
 
     public static void updateNeighbors( AssetManager assetManager, int chunkX, int chunkZ, Node rootNode){
-        for (int x = -1; x < 1; x++){
-            for (int z = -1; z < 1; z++){
+//        System.out.println("----------------------------------");
+        for (int x = -1; x <= 1; x++){
+            for (int z = -1; z <= 1; z++){
                 if (FastMath.abs(x) + FastMath.abs(z) == 1) {
                     if (ChunkData.chunkExists(chunkX + x + renderDistance, chunkZ + z + renderDistance)) {
-
-
                         Chunk chunky = ChunkData.getChunkData(chunkX + x, chunkZ + z);
-                        //System.out.println(chunkX + x + " | " + chunkZ + z + " is updating!");
-
-
+                        //System.out.println((chunkX + x) + " | " + (chunkZ + z) + " is updating!");
                         ChunkMesh.genChunkMesh(chunky, assetManager, chunkX + x, chunkZ + z, rootNode, true);
                     }
                 }

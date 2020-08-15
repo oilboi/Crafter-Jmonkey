@@ -4,11 +4,15 @@ import com.jme3.font.BitmapText;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.material.Material;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
+import com.jme3.scene.Mesh;
 import com.jme3.scene.Spatial;
+import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
+import com.jme3.scene.shape.StripBox;
 import com.jme3.system.AppSettings;
 
 import javax.imageio.ImageIO;
@@ -55,6 +59,8 @@ public class Crafter extends SimpleApplication {
         Inputs.initializeKeys(inputManager,actionListener,analogListener);
     }
 
+    private static Ray testRay;
+
     private BitmapText playerPosText;
     @Override
     public void simpleInitApp() {
@@ -82,7 +88,7 @@ public class Crafter extends SimpleApplication {
         playerPosText.setSize(guiFont.getCharSet().getRenderedSize());
         playerPosText.setName("pos");
 
-        Sphere collisionImpactMesh = new Sphere(32, 32, 0.3f, false, false);
+        Sphere collisionImpactMesh = new Sphere(32, 32, 0.1f, false, false);
         Geometry geom = new Geometry("A shape", collisionImpactMesh);
         Material mat = new Material(assetManager,
                 "Common/MatDefs/Misc/ShowNormals.j3md");
@@ -91,6 +97,22 @@ public class Crafter extends SimpleApplication {
         geom.setLocalTranslation(0,55,0);
         geom.setName("collision");
         rootNode.attachChild(geom);
+
+        testRay = new Ray(new Vector3f(0,0,0), new Vector3f(0,0,0) , 4f);
+
+
+
+        Box wireCube = new Box(0.51f,0.51f,0.51f);
+
+        wireCube.setMode(Mesh.Mode.Lines);
+
+        Geometry selectionBox = new Geometry("Box", wireCube );
+        selectionBox.setLocalTranslation(0,60,0);
+        Material mat1 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat1.setColor("Color", ColorRGBA.Black);
+        selectionBox.setMaterial(mat1);
+        selectionBox.setName("selector");
+        rootNode.attachChild(selectionBox);
     }
 
     private static int renderDistance = 2;
@@ -108,13 +130,17 @@ public class Crafter extends SimpleApplication {
 
 
 
+
     @Override
     public void simpleUpdate(float tpf){
+
+        testRay = new Ray(Player.getPosWithEyeHeight(), cam.getDirection(), 4f);
+        testRay.rayCast(rootNode,assetManager);
 
         GameCamera.handleCamera(cam);
 
         if (genned) {
-            Player.playerOnTick(tpf, rootNode);
+            Player.playerOnTick(tpf);
         }
 
         guiNode.detachChildNamed("pos");
@@ -161,6 +187,7 @@ public class Crafter extends SimpleApplication {
                 }
             }
         }
+
 
     }
 

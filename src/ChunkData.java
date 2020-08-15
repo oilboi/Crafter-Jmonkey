@@ -49,13 +49,41 @@ public class ChunkData {
         return blocksYo[hashy];
     }
 
-    public static boolean chunkExists(int chunkX, int chunkZ){
 
+    public static Chunk getChunk(int chunkX, int chunkZ){
+        //System.out.println(x + " " + y + " " + z + " " + chunkX + " " + chunkZ);
+        //System.out.println(Arrays.deepToString(chunkArray));
+        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 ){
+            return null;
+        }
+
+        Chunk piece = chunkArray[chunkX][chunkZ];
+
+        if (piece == null){
+            return null;
+        }
+
+        return piece;
+    }
+
+    public static void setBlock(int x, int y, int z, int chunkX, int chunkZ, short newBlock){
+        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 || y < 0 || y >= 128){
+            return;
+        }
+        Chunk piece = chunkArray[chunkX][chunkZ];
+        if (piece == null){
+            return;
+        }
+        int hashy = ChunkMath.genHash(x, y, z);
+        piece.setBlock(hashy, newBlock);
+    }
+
+    public static boolean chunkExists(int chunkX, int chunkZ){
         //safety checks
-        if(chunkArray.length < chunkX-1 || chunkX < 0){
+        if(chunkX >= chunkArray.length || chunkX < 0){
             return false;
         }
-        if(chunkArray.length < chunkZ-1 || chunkZ < 0){
+        if(chunkZ >= chunkArray.length || chunkZ < 0){
             return false;
         }
         //check if chunk exists

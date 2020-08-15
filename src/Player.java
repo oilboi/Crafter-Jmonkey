@@ -24,6 +24,15 @@ public class Player {
 
     private static boolean jumpBuffer = false;
 
+    private static boolean mining = false;
+
+    public static void setMining(){
+        mining = true;
+    }
+
+    public static boolean getMining(){
+        return mining;
+    }
 
     public static Vector3f getPos() {
         return pos;
@@ -45,7 +54,7 @@ public class Player {
         Player.inertia = inertia;
     }
 
-    public static void playerOnTick(float tpf, Node rootNode){
+    public static void playerOnTick(float tpf){
         inertia.y -= 50 * tpf; //gravity
         //limit speed
         if (inertia.y <= -70f){
@@ -61,7 +70,11 @@ public class Player {
             jumpBuffer = false;
         }
 
-        applyInertia(tpf, rootNode);
+        if(mining){
+            mining = false;
+        }
+
+        applyInertia(tpf);
 
         int[] current = new int[2];
         Vector3f flooredPos = pos.clone();
@@ -80,7 +93,7 @@ public class Player {
 //        }
     }
 
-    private static void applyInertia(float tpf, Node rootNode){
+    private static void applyInertia(float tpf){
         Vector3f newPos = pos.clone();
         newPos.x += inertia.x * tpf;
         newPos.y += inertia.y * tpf;
@@ -88,7 +101,7 @@ public class Player {
 
         //System.out.println(inertia.y);
 
-        collisionDetect(tpf, newPos, rootNode);
+        collisionDetect(tpf, newPos);
 
         pos = newPos;
 
@@ -99,7 +112,7 @@ public class Player {
         Player.setInertia(inertia3);
     }
 
-    private static void collisionDetect(float tpf, Vector3f newPos, Node rootNode){
+    private static void collisionDetect(float tpf, Vector3f newPos){
         onGround = false;
 
         //get the real positions of the blocks
@@ -130,12 +143,12 @@ public class Player {
         for(int i = 0; i < index; i++){
             //virtualBlock[i]; //this is the block object
             CustomAABB us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
-            collide(us, virtualBlock[i], newPos, rootNode);
+            collide(us, virtualBlock[i], newPos);
         }
     }
 
     //this is where actual collision events occur!
-    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f newPos, Node rootNode){
+    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f newPos){
 
         boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
@@ -146,7 +159,7 @@ public class Player {
 
         if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront()))) {
             //floor detection
-            if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.05f) {
+            if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.15f) {
                 //this is the collision debug sphere for terrain
                 float oldPos = newPos.y;
                 newPos.y = block.getTop();
@@ -154,7 +167,6 @@ public class Player {
                 if (newPos.y - oldPos > 1) {
                     newPos.y = (int)oldPos;
                 }
-                rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
                 inertia.y = 0;
                 onGround = true;
             }
@@ -173,7 +185,6 @@ public class Player {
             //x- detection
             if (xWithin && zWithin && yWithin) {
                 if (block.getRight() > us.getLeft() && inertia.x < 0) {
-                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
                     newPos.x = block.getRight() + width + 0.00001f;
                     inertia.x = 0;
                 }
@@ -187,7 +198,6 @@ public class Player {
             //x+ detection
             if (xWithin && zWithin && yWithin) {
                 if (block.getLeft() < us.getRight() && inertia.x > 0) {
-                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
                     newPos.x = block.getLeft() - width - 0.00001f;
                     inertia.x = 0;
                 }
@@ -201,7 +211,6 @@ public class Player {
             //z- detection
             if (xWithin && zWithin && yWithin) {
                 if (block.getBack() > us.getFront() && inertia.z < 0) {
-                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
                     newPos.z = block.getBack() + width + 0.00001f;
                     inertia.z = 0;
                 }
@@ -215,7 +224,6 @@ public class Player {
             //z+ detection
             if (xWithin && zWithin && yWithin) {
                 if (block.getFront() < us.getBack() && inertia.z > 0) {
-                    rootNode.getChild("collision").setLocalTranslation((block.getRight() + block.getLeft()) / 2f, block.getTop(), (block.getFront() + block.getBack()) / 2f);
                     newPos.z = block.getFront() - width - 0.00001f;
                     inertia.z = 0;
                 }

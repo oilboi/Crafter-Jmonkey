@@ -158,6 +158,10 @@ public class Chunk {
         }
     }
 
+    public void setBlock(int hash, short newBlock){
+        block[hash] = newBlock;
+    }
+
     //debug testing for now
     public void genDebug(){
         int x = 0;

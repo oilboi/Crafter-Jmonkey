@@ -16,6 +16,8 @@ public class Loader {
         textureAtlas = mat;
     }
 
+    //TODO: GET MINING ANIMATION TEXTURE!
+
     public static Material getTextureAtlas(){
         return(textureAtlas);
     }

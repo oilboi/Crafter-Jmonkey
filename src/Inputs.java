@@ -18,9 +18,11 @@ public class Inputs {
         inputManager.addMapping("shift", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
 
+        inputManager.addMapping("left", new KeyTrigger(KeyInput.KEY_LCONTROL));
+
         // Add the names to the action listener.
         //inputManager.addListener(actionListener, "Pause");
-        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space");
+        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space", "left");
     }
 
     private static int maxSpeed = 5;
@@ -45,6 +47,9 @@ public class Inputs {
                 break;
         }
 
+        if (name.equals("left")){
+            Player.setMining();
+        }
 
         switch (run2D) {
             case 1:
