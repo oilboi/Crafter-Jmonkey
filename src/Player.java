@@ -47,6 +47,14 @@ public class Player {
 
     public static void playerOnTick(float tpf, Node rootNode){
         inertia.y -= 50 * tpf; //gravity
+        //limit speed
+        if (inertia.y <= -70f){
+            inertia.y = -70f;
+        } else if (inertia.y > 70f){
+            inertia.y = 70f;
+        }
+
+        System.out.println(inertia.y);
 
         if(jumpBuffer){
             inertia.y += 10f;//12f;
@@ -135,7 +143,8 @@ public class Player {
 
         //System.out.println(block.getLeft() + " " + block.getBottom() + " " + block.getFront());
 
-        if (xWithin && zWithin && yWithin) {
+
+        if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront()))) {
             //floor detection
             if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.01f) {
                 //this is the collision debug sphere for terrain
