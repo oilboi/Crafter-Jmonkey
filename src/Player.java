@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Player {
     private static int renderDistance = Crafter.getRenderDistance();
-    private static Vector3f pos = new Vector3f(0,55,0);
+    private static Vector3f pos = new Vector3f(0,150,0);
 
     private static float eyeHeight = 1.5f;
 
@@ -49,7 +49,7 @@ public class Player {
         inertia.y -= 50 * tpf; //gravity
 
         if(jumpBuffer){
-            inertia.y += 12f;
+            inertia.y += 10f;//12f;
             jumpBuffer = false;
         }
 
@@ -137,7 +137,7 @@ public class Player {
 
         if (xWithin && zWithin && yWithin) {
             //floor detection
-            if (block.getTop() > us.getBottom() && inertia.y < 0) {
+            if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.01f) {
                 //this is the collision debug sphere for terrain
                 float oldPos = newPos.y;
                 newPos.y = block.getTop();
@@ -150,7 +150,6 @@ public class Player {
                 onGround = true;
             }
         }
-
 
         float averageX = FastMath.abs(((block.getLeft() + block.getRight())/2f) - newPos.x);
         float averageY = FastMath.abs(((block.getBottom() + block.getTop())/2f) - newPos.y);
@@ -213,22 +212,6 @@ public class Player {
                 }
             }
         }
-
-
-
-//            //z- detection
-//            if (block.getBack() > us.getFront()) {
-//                pos.z = block.getBack() + width + 0.00001f;
-//                inertia.z = 0;
-//                us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
-//            }
-//
-//            //z+ detection
-//            if (block.getFront() < us.getBack()) {
-//                pos.z = block.getFront() - width - 0.00001f;
-//                inertia.z = 0;
-//                us = new CustomAABB(newPos.x, newPos.y, newPos.z, width, height);
-//            }
     }
 
     private static boolean detectBlock(Vector3f flooredPos){
