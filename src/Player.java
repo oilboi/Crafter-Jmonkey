@@ -176,9 +176,12 @@ public class Player {
             }
         }
 
-        if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-1,block.getFront()))) {
+        //stop getting shot across the map
+        if (xWithin && zWithin && yWithin  &&
+                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-1,block.getFront())) &&
+                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-2,block.getFront()))) {
             //head detection
-            if (block.getBottom() < us.getTop() && inertia.y > 0 && us.getTop() - block.getBottom() < 0.15f) {
+            if (block.getBottom() < us.getTop() && inertia.y >= 0 && us.getTop() - block.getBottom() < 0.15f) {
                 //System.out.println(us.getTop() - block.getBottom());
                 newPos.y = block.getBottom() - height;
                 inertia.y = 0;
