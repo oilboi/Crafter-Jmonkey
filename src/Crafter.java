@@ -79,7 +79,6 @@ public class Crafter extends SimpleApplication {
 
         cam.setLocation(new Vector3f(0,128,128));
 
-
         this.assetManager.registerLocator("texture/", FileLocator.class); // default
 
         rootNode.setCullHint(Spatial.CullHint.Never);
@@ -103,8 +102,6 @@ public class Crafter extends SimpleApplication {
         rootNode.attachChild(geom);
 
         testRay = new Ray(new Vector3f(0,0,0), new Vector3f(0,0,0) , 4f);
-
-
 
         Box wireCube = new Box(0.51f,0.51f,0.51f);
 
@@ -150,10 +147,6 @@ public class Crafter extends SimpleApplication {
                 Player.playerOnTick();
             }
         }
-
-
-
-
 
         guiNode.detachChildNamed("pos");
         playerPosText.setText("X: " + Player.getPos().x + "\nY: " + Player.getPos().y + "\nZ: " + Player.getPos().z);
