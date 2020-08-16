@@ -66,6 +66,7 @@ public class ChunkData {
         return piece;
     }
 
+
     public static void setBlock(int x, int y, int z, int chunkX, int chunkZ, short newBlock){
         if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 || y < 0 || y >= 128){
             return;

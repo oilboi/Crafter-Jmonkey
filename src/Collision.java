@@ -4,10 +4,10 @@ import com.jme3.math.Vector3f;
 public class Collision {
     private static int renderDistance = Crafter.getRenderDistance();
     final private static float gameSpeed = 0.001f;
-    private static boolean objectOnGround = false;
-    public static boolean applyInertia(Vector3f pos,Vector3f inertia, boolean onGround, float width, float height){
-        objectOnGround = onGround;
-        inertia.y -= 50 * gameSpeed; //gravity
+    public static boolean applyInertia(Vector3f pos,Vector3f inertia, boolean onGround, float width, float height, boolean gravity){
+        if(gravity) {
+            inertia.y -= 50 * gameSpeed; //gravity
+        }
 
         //limit speed
         if (inertia.y <= -70f){
@@ -20,19 +20,16 @@ public class Collision {
         pos.y += inertia.y * gameSpeed;
         pos.z += inertia.z * gameSpeed;
 
-        collisionDetect(pos, inertia, onGround, width, height);
+        onGround = collisionDetect(pos, inertia, onGround, width, height);
 
         //apply friction
-        Vector3f inertia3 = Player.getInertia();
-        inertia3.x += -inertia3.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
-        inertia3.z += -inertia3.z * gameSpeed * 10;
-        Player.setInertia(inertia3);
-
-        return objectOnGround;
+        inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
+        inertia.z += -inertia.z * gameSpeed * 10;
+        return onGround;
     }
 
-    private static void collisionDetect(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height){
-        objectOnGround = false;
+    private static boolean collisionDetect(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height){
+        onGround = false;
 
         //get the real positions of the blocks
         Vector3f fPos = pos.clone();
@@ -60,13 +57,14 @@ public class Collision {
         for(int i = 0; i < index; i++){
             //virtualBlock[i]; //this is the block object
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-            collide(us, virtualBlock[i], pos, inertia, width, height);
+            onGround = collide(us, virtualBlock[i], pos, inertia, width, height,onGround);
         }
+        return onGround;
     }
 
 
     //this is where actual collision events occur!
-    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height){
+    public static boolean collide(CustomAABB us, CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
         boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
@@ -86,7 +84,7 @@ public class Collision {
                     pos.y = (int)oldPos;
                 }
                 inertia.y = 0;
-                objectOnGround = true;
+                onGround = true;
             }
         }
 
@@ -162,6 +160,7 @@ public class Collision {
                 }
             }
         }
+        return onGround;
     }
 
     private static boolean detectBlock(Vector3f flooredPos){

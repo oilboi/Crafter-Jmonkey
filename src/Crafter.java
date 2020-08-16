@@ -9,6 +9,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Mesh;
+import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.jme3.scene.shape.Sphere;
@@ -131,6 +132,8 @@ public class Crafter extends SimpleApplication {
 
     private static long accumulatedTime = 0;
     private static int ticks = 0;
+    private boolean testGen = false;
+
     @Override
     public void simpleUpdate(float tpf){
 
@@ -145,6 +148,7 @@ public class Crafter extends SimpleApplication {
             accumulatedTime -= 1_000_000;
             if (genned) {
                 Player.playerOnTick();
+                ItemEntity.itemsOnTick(rootNode);
             }
         }
 

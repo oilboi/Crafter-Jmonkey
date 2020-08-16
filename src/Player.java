@@ -99,7 +99,7 @@ public class Player {
             }
         }
 
-        onGround = Collision.applyInertia(pos, inertia, onGround, width, height);
+        onGround = Collision.applyInertia(pos, inertia, onGround, width, height,true);
 
         int[] current = new int[2];
         Vector3f flooredPos = pos.clone();
