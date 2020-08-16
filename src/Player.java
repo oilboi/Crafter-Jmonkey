@@ -157,10 +157,10 @@ public class Player {
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
-        //System.out.println(block.getLeft() + " " + block.getBottom() + " " + block.getFront());
-
-
-        if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront()))) {
+        //double check to stop clipping if not enough space
+        if (xWithin && zWithin && yWithin &&
+                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront())) &&
+                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+2,block.getFront()))) {
             //System.out.println((us.getBottom() - block.getTop()));
             //floor detection
             if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.15f) {
@@ -243,10 +243,7 @@ public class Player {
                     inertia.z = 0;
                 }
             }
-
-
         }
-
     }
 
     private static boolean detectBlock(Vector3f flooredPos){
