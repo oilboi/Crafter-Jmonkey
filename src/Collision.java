@@ -25,6 +25,11 @@ public class Collision {
         //apply friction
         inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
         inertia.z += -inertia.z * gameSpeed * 10;
+
+        if(pos.y < 0){
+            pos.y += 100;
+        }
+
         return onGround;
     }
 

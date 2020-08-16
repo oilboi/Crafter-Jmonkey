@@ -118,10 +118,6 @@ public class Player {
         current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
         currentChunk = current;
 
-        //returns player back to origin point
-        if(pos.y < 0){
-            pos = new Vector3f(0,100,0);
-        }
     }
 
     private static short getBlock(float x, float y, float z){
