@@ -87,7 +87,6 @@ public class Inputs {
                 }
 
                 if(Player.isOnGround()) {
-                    System.out.println("trying to jump");
                     Player.setJumpBuffer();
                 }
                 break;

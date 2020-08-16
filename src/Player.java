@@ -56,9 +56,6 @@ public class Player {
 
 
     public static void playerOnTick(){
-
-//        System.out.println(inertia.y);
-
         if(jumpBuffer){
             inertia.y += 12f;
             jumpBuffer = false;
