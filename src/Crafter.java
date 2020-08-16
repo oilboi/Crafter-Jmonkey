@@ -72,6 +72,7 @@ public class Crafter extends SimpleApplication {
         initKeys();
         flyCam.setEnabled(true);
         flyCam.setMoveSpeed(0);
+        flyCam.setZoomSpeed(0);
 
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
