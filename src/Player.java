@@ -54,8 +54,11 @@ public class Player {
         Player.inertia = inertia;
     }
 
-    public static void playerOnTick(float tpf){
-        inertia.y -= 50 * tpf; //gravity
+    private static float gameSpeed = 0.001f;
+
+
+    public static void playerOnTick(){
+        inertia.y -= 50 * gameSpeed; //gravity
         //limit speed
         if (inertia.y <= -70f){
             inertia.y = -70f;
@@ -74,7 +77,7 @@ public class Player {
             mining = false;
         }
 
-        applyInertia(tpf);
+        applyInertia();
 
         int[] current = new int[2];
         Vector3f flooredPos = pos.clone();
@@ -93,26 +96,26 @@ public class Player {
 //        }
     }
 
-    private static void applyInertia(float tpf){
+    private static void applyInertia(){
         Vector3f newPos = pos.clone();
-        newPos.x += inertia.x * tpf;
-        newPos.y += inertia.y * tpf;
-        newPos.z += inertia.z * tpf;
+        newPos.x += inertia.x * gameSpeed;
+        newPos.y += inertia.y * gameSpeed;
+        newPos.z += inertia.z * gameSpeed;
 
         //System.out.println(inertia.y);
 
-        collisionDetect(tpf, newPos);
+        collisionDetect(newPos);
 
         pos = newPos;
 
         //apply friction
         Vector3f inertia3 = Player.getInertia();
-        inertia3.x += -inertia3.x * tpf * 10; // do (10 - 9.5f) for slippery!
-        inertia3.z += -inertia3.z * tpf * 10;
+        inertia3.x += -inertia3.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
+        inertia3.z += -inertia3.z * gameSpeed * 10;
         Player.setInertia(inertia3);
     }
 
-    private static void collisionDetect(float tpf, Vector3f newPos){
+    private static void collisionDetect(Vector3f newPos){
         onGround = false;
 
         //get the real positions of the blocks
@@ -158,6 +161,7 @@ public class Player {
 
 
         if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront()))) {
+            //System.out.println((us.getBottom() - block.getTop()));
             //floor detection
             if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.15f) {
                 //this is the collision debug sphere for terrain
@@ -171,6 +175,7 @@ public class Player {
                 onGround = true;
             }
         }
+
         if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-1,block.getFront()))) {
             //head detection
             if (block.getBottom() < us.getTop() && inertia.y > 0 && us.getTop() - block.getBottom() < 0.15f) {
@@ -179,6 +184,7 @@ public class Player {
                 inertia.y = 0;
             }
         }
+
 
 
         float averageX = FastMath.abs(((block.getLeft() + block.getRight())/2f) - newPos.x);
@@ -237,7 +243,10 @@ public class Player {
                     inertia.z = 0;
                 }
             }
+
+
         }
+
     }
 
     private static boolean detectBlock(Vector3f flooredPos){

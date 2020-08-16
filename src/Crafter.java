@@ -33,6 +33,10 @@ public class Crafter extends SimpleApplication {
         AppSettings appSettings = new AppSettings(true);
         appSettings.setResizable(true);
 
+        //appSettings.setVSync(true);
+        //appSettings.setFrequency(20);
+        //appSettings.setFrameRate(60);
+
         //window sizing
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
@@ -128,20 +132,28 @@ public class Crafter extends SimpleApplication {
         return renderDistance;
     }
 
-
-
-
+    private static long accumulatedTime = 0;
+    private static int ticks = 0;
     @Override
     public void simpleUpdate(float tpf){
+
+        GameCamera.handleCamera(cam);
 
         testRay = new Ray(Player.getPosWithEyeHeight(), cam.getDirection(), 4f);
         testRay.rayCast(rootNode,assetManager);
 
-        GameCamera.handleCamera(cam);
+        accumulatedTime = Tick.tick(accumulatedTime);
 
-        if (genned) {
-            Player.playerOnTick(tpf);
+        while (accumulatedTime > 1_000_000) {
+            accumulatedTime -= 1_000_000;
+            if (genned) {
+                Player.playerOnTick();
+            }
         }
+
+
+
+
 
         guiNode.detachChildNamed("pos");
         playerPosText.setText("X: " + Player.getPos().x + "\nY: " + Player.getPos().y + "\nZ: " + Player.getPos().z);
@@ -187,8 +199,6 @@ public class Crafter extends SimpleApplication {
                 }
             }
         }
-
-
     }
 
 
