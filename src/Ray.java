@@ -1,3 +1,4 @@
+import com.google.gson.stream.JsonToken;
 import com.jme3.asset.AssetManager;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
@@ -13,7 +14,7 @@ public class Ray {
     private Vector3f cachePos;
     private Vector3f newPos;
     private Vector3f finalPos;
-
+    private Vector3f lastPos;
     public Ray(Vector3f position, Vector3f direction, float l){
         pos = position;
         dir = direction;
@@ -36,6 +37,8 @@ public class Ray {
                 break;
             }
             step += precision;
+
+            lastPos = newPos.clone();
         }
 
         //System.out.println(finalPos);
@@ -43,6 +46,8 @@ public class Ray {
             rootNode.getChild("selector").setLocalTranslation(finalPos.x+0.5f, finalPos.y+0.5f, finalPos.z+0.5f);
             if(Player.getMining()) {
                 destroyBlock(finalPos, assetManager, rootNode);
+            } else if (Player.getPlacing() && lastPos != null){
+                placeBlock(lastPos, assetManager, rootNode);
             }
         } else {
             rootNode.getChild("selector").setLocalTranslation(0, -1000f, 0);
@@ -62,16 +67,20 @@ public class Ray {
 
     private static void destroyBlock(Vector3f flooredPos, AssetManager assetManager, Node rootNode){
         int[] current = new int[2];
-
         current[0] = (int)(FastMath.floor(flooredPos.x / 16f));
         current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
-
         Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
-
         ChunkData.setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance, (short) 0);
-
         Chunk chunk = ChunkData.getChunk(current[0],current[1]);
-
+        ChunkMesh.genChunkMesh(chunk, assetManager, current[0],current[1], rootNode, false);
+    }
+    private static void placeBlock(Vector3f flooredPos, AssetManager assetManager, Node rootNode){
+        int[] current = new int[2];
+        current[0] = (int)(FastMath.floor(flooredPos.x / 16f));
+        current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
+        Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
+        ChunkData.setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance, (short) 1);
+        Chunk chunk = ChunkData.getChunk(current[0],current[1]);
         ChunkMesh.genChunkMesh(chunk, assetManager, current[0],current[1], rootNode, false);
     }
 }

@@ -9,29 +9,39 @@ import java.util.Arrays;
 public class Player {
     private static int renderDistance = Crafter.getRenderDistance();
     private static Vector3f pos = new Vector3f(0,150,0);
-
     private static float eyeHeight = 1.5f;
-
     private static Vector3f inertia = new Vector3f(0,0,0);
-
     private static float height = 1.9f;
-
     private static float width = 0.3f;
-
     private static int[] currentChunk = {0,0};
-
     private static boolean onGround = false;
-
     private static boolean jumpBuffer = false;
-
     private static boolean mining = false;
+    private static float mineTimer = 0;
+    private static boolean placing = false;
+    public static float placeTimer = 0;
 
     public static void setMining(){
-        mining = true;
+        if (mineTimer == 0) {
+            mining = true;
+            mineTimer = 20;
+        }
     }
 
     public static boolean getMining(){
         return mining;
+    }
+
+
+    public static void setPlacing() {
+        if (placeTimer == 0) {
+            placing = true;
+            placeTimer = 20;
+        }
+    }
+
+    public static boolean getPlacing() {
+        return placing;
     }
 
     public static Vector3f getPos() {
@@ -55,14 +65,31 @@ public class Player {
     }
 
 
+
     public static void playerOnTick(){
         if(jumpBuffer){
             inertia.y += 12f;
             jumpBuffer = false;
         }
-
         if(mining){
             mining = false;
+        }
+        if(placing){
+            placing = false;
+        }
+
+        if(placeTimer > 0){
+            placeTimer -= 0.1f;
+            if (placeTimer < 0.1){
+                placeTimer = 0;
+            }
+        }
+
+        if(mineTimer > 0){
+            mineTimer -= 0.1f;
+            if (mineTimer < 0.1){
+                mineTimer = 0;
+            }
         }
 
         onGround = Collision.applyInertia(pos, inertia, onGround, width, height);

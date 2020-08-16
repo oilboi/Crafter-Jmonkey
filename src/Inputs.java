@@ -1,8 +1,10 @@
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
+import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.AnalogListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
@@ -18,11 +20,12 @@ public class Inputs {
         inputManager.addMapping("shift", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("space", new KeyTrigger(KeyInput.KEY_SPACE));
 
-        inputManager.addMapping("left", new KeyTrigger(KeyInput.KEY_LCONTROL));
+        inputManager.addMapping("lmb", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
+        inputManager.addMapping("rmb", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
 
         // Add the names to the action listener.
         //inputManager.addListener(actionListener, "Pause");
-        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space", "left");
+        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space", "lmb", "rmb");
     }
 
     private static int maxSpeed = 5;
@@ -47,8 +50,11 @@ public class Inputs {
                 break;
         }
 
-        if (name.equals("left")){
+        if (name.equals("lmb")){
             Player.setMining();
+        }
+        if (name.equals("rmb")){
+            Player.setPlacing();
         }
 
         switch (run2D) {

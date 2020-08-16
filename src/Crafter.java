@@ -35,7 +35,7 @@ public class Crafter extends SimpleApplication {
 
         //appSettings.setVSync(true);
         //appSettings.setFrequency(20);
-        //appSettings.setFrameRate(60);
+//        appSettings.setFrameRate(2);
 
         //window sizing
         Toolkit tk = Toolkit.getDefaultToolkit();
