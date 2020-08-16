@@ -26,8 +26,12 @@ public class Inputs {
         inputManager.addMapping("scrollUp", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
         inputManager.addMapping("scrollDown", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
 
+        inputManager.addMapping("f1", new KeyTrigger(KeyInput.KEY_F1));
+
+
+
         // Add the names to the action listener.
-        //inputManager.addListener(actionListener, "Pause");
+        inputManager.addListener(actionListener, "f1");
         inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space", "lmb", "rmb", "scrollUp", "scrollDown");
     }
 

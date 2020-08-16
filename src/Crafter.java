@@ -24,7 +24,6 @@ import java.io.IOException;
 
 public class Crafter extends SimpleApplication {
 
-
     public static void main(String[] args) throws IOException {
         //self app creation
         Crafter app = new Crafter();
@@ -138,6 +137,7 @@ public class Crafter extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf){
 
+
         GameCamera.handleCamera(cam);
 
         testRay = new Ray(Player.getPosWithEyeHeight(), cam.getDirection(), 4f);
@@ -203,6 +203,28 @@ public class Crafter extends SimpleApplication {
     private final ActionListener actionListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean keyPressed, float tpf) {
+
+            if (keyPressed && name.equals("f1")) {
+                if(!settings.isFullscreen()) {
+                    settings.setFullscreen(true);
+                    GraphicsDevice device = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+                    DisplayMode[] modes = device.getDisplayModes();
+                    int i = 0;
+                    Toolkit tk = Toolkit.getDefaultToolkit();
+                    Dimension d = tk.getScreenSize();
+                    settings.setResolution(d.width, d.height);
+                    settings.setBitsPerPixel(modes[i].getBitDepth());
+                    settings.setFullscreen(device.isFullScreenSupported());
+                    setSettings(settings);
+                    restart();
+                } else {
+                    settings.setFullscreen(false);
+                    Toolkit tk = Toolkit.getDefaultToolkit();
+                    Dimension d = tk.getScreenSize();
+                    settings.setResolution(d.width/2, d.height/2);
+                    restart();
+                }
+            }
         }
     };
 
