@@ -171,13 +171,22 @@ public class Player {
                 onGround = true;
             }
         }
+        if (xWithin && zWithin && yWithin  && !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-1,block.getFront()))) {
+            //head detection
+            if (block.getBottom() < us.getTop() && inertia.y > 0 && us.getTop() - block.getBottom() < 0.15f) {
+                //System.out.println(us.getTop() - block.getBottom());
+                newPos.y = block.getBottom() - height;
+                inertia.y = 0;
+            }
+        }
+
 
         float averageX = FastMath.abs(((block.getLeft() + block.getRight())/2f) - newPos.x);
         float averageY = FastMath.abs(((block.getBottom() + block.getTop())/2f) - newPos.y);
         float averageZ = FastMath.abs(((block.getFront() + block.getBack())/2f) - newPos.z);
 
         if (averageX > averageZ) {
-            us = new CustomAABB(newPos.x, newPos.y+0.1f, newPos.z, width, height);
+            us = new CustomAABB(newPos.x, newPos.y+0.1f, newPos.z, width, height-0.1f);
             xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
             yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
             zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
@@ -190,7 +199,7 @@ public class Player {
                 }
             }
 
-            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height);
+            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height-0.1f);
             xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
             yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
             zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
@@ -203,7 +212,7 @@ public class Player {
                 }
             }
         } else {
-            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height);
+            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height-0.1f);
             xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
             yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
             zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
@@ -216,7 +225,7 @@ public class Player {
                 }
             }
 
-            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height);
+            us = new CustomAABB(newPos.x, newPos.y + 0.1f, newPos.z, width, height-0.1f);
             xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
             yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
             zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
