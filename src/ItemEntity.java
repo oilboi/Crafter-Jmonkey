@@ -10,7 +10,7 @@ import java.util.Arrays;
 //this is the item entity object
 public class ItemEntity {
     //this holds all the items
-    private static ItemEntity[] items = new ItemEntity[100]; //128000 items max
+    private static ItemEntity[] items = new ItemEntity[5000]; //128000 items max
     private static int currentIndex = 0;
     private static float itemSize = 0.2f;
 
@@ -29,9 +29,6 @@ public class ItemEntity {
         id = blockID;
         animationHeight = 0;
         animationRotation = 0;
-
-        System.out.println(currentIndex);
-
         index = currentIndex;
 
         Geometry geo = new Geometry("item:"+currentIndex, generateMesh(blockID));

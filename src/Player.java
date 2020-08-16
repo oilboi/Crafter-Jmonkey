@@ -19,7 +19,16 @@ public class Player {
     private static boolean mining = false;
     private static float mineTimer = 0;
     private static boolean placing = false;
-    public static float placeTimer = 0;
+    private static float placeTimer = 0;
+    private static short selectedItem = 1;
+
+    public static short getSelectedItem(){
+        return selectedItem;
+    }
+
+    public static void setSelectedItem(short newItem){
+        selectedItem = newItem;
+    }
 
     public static void setMining(){
         if (mineTimer == 0) {

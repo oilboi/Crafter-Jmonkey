@@ -1,13 +1,13 @@
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
 import com.jme3.input.MouseInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.input.controls.*;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 public class Inputs {
 
@@ -23,9 +23,12 @@ public class Inputs {
         inputManager.addMapping("lmb", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("rmb", new MouseButtonTrigger(MouseInput.BUTTON_RIGHT));
 
+        inputManager.addMapping("scrollUp", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, false));
+        inputManager.addMapping("scrollDown", new MouseAxisTrigger(MouseInput.AXIS_WHEEL, true));
+
         // Add the names to the action listener.
         //inputManager.addListener(actionListener, "Pause");
-        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space", "lmb", "rmb");
+        inputManager.addListener(analogListener, "w", "a", "s", "d", "shift", "space", "lmb", "rmb", "scrollUp", "scrollDown");
     }
 
     private static int maxSpeed = 5;
@@ -48,6 +51,22 @@ public class Inputs {
             default:
                 run2D = 0;
                 break;
+        }
+
+        if (name.equals("scrollUp")){
+            short currentItem = Player.getSelectedItem();
+            currentItem += 1;
+            if (currentItem > 5){
+                currentItem = 1;
+            }
+            Player.setSelectedItem(currentItem);
+        } else if (name.equals("scrollDown")){
+            short currentItem = Player.getSelectedItem();
+            currentItem -= 1;
+            if (currentItem < 1){
+                currentItem = 5;
+            }
+            Player.setSelectedItem(currentItem);
         }
 
         if (name.equals("lmb")){

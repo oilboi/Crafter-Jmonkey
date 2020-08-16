@@ -47,7 +47,7 @@ public class Ray {
                 short thisBlock = destroyBlock(finalPos, assetManager, rootNode);
                 new ItemEntity(new Vector3f(finalPos.x+0.5f, finalPos.y+0.5f, finalPos.z+0.5f), new Vector3f((FastMath.nextRandomFloat()-0.5f)*10,FastMath.nextRandomFloat()*10f,(FastMath.nextRandomFloat()-0.5f)*10), thisBlock, rootNode);
             } else if (Player.getPlacing() && lastPos != null){
-                placeBlock(lastPos, assetManager, rootNode);
+                placeBlock(lastPos, assetManager, rootNode, Player.getSelectedItem());
             }
         } else {
             rootNode.getChild("selector").setLocalTranslation(0, -1000f, 0);
@@ -79,7 +79,7 @@ public class Ray {
         ChunkMesh.genChunkMesh(chunk, assetManager, current[0],current[1], rootNode, false);
         return thisBlock;
     }
-    private static void placeBlock(Vector3f flooredPos, AssetManager assetManager, Node rootNode){
+    private static void placeBlock(Vector3f flooredPos, AssetManager assetManager, Node rootNode, short selectedItem){
         int[] current = new int[2];
         current[0] = (int)(FastMath.floor(flooredPos.x / 16f));
         current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
@@ -89,7 +89,7 @@ public class Ray {
         CustomAABB us = new CustomAABB(Player.getPos().x, Player.getPos().y+0.1f, Player.getPos().z, Player.getWidth(), Player.getHeight());
         CustomBlockBox theBlock = new CustomBlockBox((int) flooredPos.x, (int) flooredPos.y, (int) flooredPos.z);
         if(!Collision.wouldCollide(us, theBlock)) {
-            ChunkData.setBlock((int) realPos.x, (int) realPos.y, (int) realPos.z, current[0] + renderDistance, current[1] + renderDistance, (short) 1);
+            ChunkData.setBlock((int) realPos.x, (int) realPos.y, (int) realPos.z, current[0] + renderDistance, current[1] + renderDistance, selectedItem);
             Chunk chunk = ChunkData.getChunk(current[0], current[1]);
             ChunkMesh.genChunkMesh(chunk, assetManager, current[0], current[1], rootNode, false);
         }
