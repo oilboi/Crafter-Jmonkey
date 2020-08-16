@@ -64,9 +64,9 @@ public class Collision {
         }
     }
 
+
     //this is where actual collision events occur!
     public static void collide(CustomAABB us, CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height){
-
         boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
@@ -100,15 +100,10 @@ public class Collision {
                 inertia.y = 0;
             }
         }
-
-
-
         float averageX = FastMath.abs(((block.getLeft() + block.getRight())/2f) - pos.x);
         float averageY = FastMath.abs(((block.getBottom() + block.getTop())/2f) - pos.y);
         float averageZ = FastMath.abs(((block.getFront() + block.getBack())/2f) - pos.z);
-
         if (averageX > averageZ) {
-
             if (!detectBlock(new Vector3f(block.getLeft()+1, block.getBottom(),block.getFront()))) {
                 us = new CustomAABB(pos.x, pos.y + 0.1501f, pos.z, width, height - 0.3001f);
                 xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
@@ -123,7 +118,6 @@ public class Collision {
                     }
                 }
             }
-
             if (!detectBlock(new Vector3f(block.getLeft()-1, block.getBottom(),block.getFront()))) {
                 us = new CustomAABB(pos.x, pos.y + 0.1501f, pos.z, width, height - 0.3001f);
                 xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
@@ -179,5 +173,13 @@ public class Collision {
         Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
 
         return ChunkData.getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance) != 0;
+    }
+
+    //this is used for block placing
+    public static boolean wouldCollide(CustomAABB us, CustomBlockBox block){
+        boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
+        boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
+        boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
+        return (xWithin && yWithin && zWithin);
     }
 }

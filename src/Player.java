@@ -40,6 +40,13 @@ public class Player {
         }
     }
 
+    public static float getHeight(){
+        return height;
+    }
+    public static float getWidth(){
+        return width;
+    }
+
     public static boolean getPlacing() {
         return placing;
     }

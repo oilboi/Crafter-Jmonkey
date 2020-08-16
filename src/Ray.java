@@ -78,9 +78,15 @@ public class Ray {
         int[] current = new int[2];
         current[0] = (int)(FastMath.floor(flooredPos.x / 16f));
         current[1] = (int)(FastMath.floor(flooredPos.z / 16f));
+
         Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
-        ChunkData.setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance, (short) 1);
-        Chunk chunk = ChunkData.getChunk(current[0],current[1]);
-        ChunkMesh.genChunkMesh(chunk, assetManager, current[0],current[1], rootNode, false);
+
+        CustomAABB us = new CustomAABB(Player.getPos().x, Player.getPos().y+0.1f, Player.getPos().z, Player.getWidth(), Player.getHeight());
+        CustomBlockBox theBlock = new CustomBlockBox((int) flooredPos.x, (int) flooredPos.y, (int) flooredPos.z);
+        if(!Collision.wouldCollide(us, theBlock)) {
+            ChunkData.setBlock((int) realPos.x, (int) realPos.y, (int) realPos.z, current[0] + renderDistance, current[1] + renderDistance, (short) 1);
+            Chunk chunk = ChunkData.getChunk(current[0], current[1]);
+            ChunkMesh.genChunkMesh(chunk, assetManager, current[0], current[1], rootNode, false);
+        }
     }
 }
